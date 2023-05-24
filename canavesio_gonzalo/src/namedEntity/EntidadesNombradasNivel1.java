@@ -6,12 +6,12 @@ class persona extends EntidadNombrada{
     persona(String name, String category, int frequency, String nc, int id) {
         super(name, category, frequency, nc);
         this.id = id;
-        personaFrequency++;
+        personaFrequency+=frequency;
     }
 
     public void incFrequency() {
         super.incFrequency();
-        personaFrequency++;
+        personaFrequency+=frequency;
     }
 }
 
@@ -19,12 +19,12 @@ class lugar extends EntidadNombrada{
     static int lugarFrequency = 0;
     lugar(String name, String category, int frequency, String nc) {
         super(name, category, frequency, nc);
-        lugarFrequency++;
+        lugarFrequency+=frequency;
     }
 
     public void incFrequency() {
         super.incFrequency();
-        lugarFrequency++;
+        lugarFrequency+=frequency;
     }
 }
 
@@ -36,12 +36,12 @@ class organizacion extends EntidadNombrada{
         super(name, category, frequency, nc);
         this.NroMiembros = NroMiembros;
         this.tipoOrg = tipoOrg;
-        organizacionFrequency++;
+        organizacionFrequency+=frequency;
     }
 
     public void incFrequency() {
         super.incFrequency();
-        organizacionFrequency++;
+        organizacionFrequency+=frequency;
     }
 }
 
@@ -53,12 +53,12 @@ class producto extends EntidadNombrada{
         super(name, category, frequency, nc);
         this.Comercial = Comercial;
         this.Productor = Productor;
-        productoFrequency++;
+        productoFrequency+=frequency;
     }
 
     public void incFrequency() {
         super.incFrequency();
-        productoFrequency++;
+        productoFrequency+=frequency;
     }
 }
 
@@ -70,12 +70,12 @@ class evento extends EntidadNombrada{
         super(name, category, frequency, nc);
         this.fecha = fecha;
         this.recurrente = recurrente;
-        eventoFrequency++;
+        eventoFrequency+=frequency;
     }
 
     public void incFrequency() {
         super.incFrequency();
-        eventoFrequency++;
+        eventoFrequency+=frequency;
     }
 }
 
@@ -85,12 +85,12 @@ class fecha extends EntidadNombrada{
     fecha(String name, String category, int frequency, String nc, String fechaPrecisa) {
         super(name, category, frequency, nc);
         this.fechaPrecisa = fechaPrecisa;
-        fechaFrequency++;
+        fechaFrequency+=frequency;
     }
 
     public void incFrequency() {
         super.incFrequency();
-        fechaFrequency++;
+        fechaFrequency+=frequency;
     }
 }
 
@@ -100,12 +100,12 @@ class otro extends EntidadNombrada {
     otro(String name, String category, int frequency, String nc, String Comments) {
         super(name, category, frequency, nc);
         this.Comments = Comments;
-        otroFrequency++;
+        otroFrequency+=frequency;
     }
 
     public void incFrequency() {
         super.incFrequency();
-        otroFrequency++;
+        otroFrequency+=frequency;
     }
 }
 

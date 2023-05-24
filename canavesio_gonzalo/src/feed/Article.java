@@ -1,5 +1,6 @@
 package feed;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +10,7 @@ import namedEntity.heuristic.Heuristic;
 
 /*Esta clase modela el contenido de un articulo (ie, un item en el caso del rss feed) */
 
-public class Article {
+public class Article implements Serializable {
 	private String title;
 	private String text;
 	private Date publicationDate;
@@ -64,6 +65,7 @@ public class Article {
 				+ "]";
 	}
 	
+
 	
 	
 	public EntidadNombrada getNamedEntity(String namedEntity){
@@ -75,7 +77,7 @@ public class Article {
 		return null;
 	}
 
-	public void computeNamedEntities(Heuristic h){
+	public List<String> computeNamedEntities(Heuristic h){
 		String text = this.getTitle() + " " +  this.getText();  
 			
 		String charsToRemove = ".,;:()'!?&=\n";
@@ -83,18 +85,15 @@ public class Article {
 			text = text.replace(String.valueOf(c), "");
 		}
 			
-		for (String s: text.split(" ")) {
-			if (h.isEntity(s)){
-				EntidadNombrada ne = this.getNamedEntity(s);
-				if (ne != null) {
-					ne.incFrequency();
-				}else {
-					CreadorEntidades ce = new CreadorEntidades();
-					ne = ce.createEntity(s);
-					namedEntityList.add(ne);
-				}
+		String[] words = text.split(" ");
+		List<String> namedEntities = new ArrayList<String>();
+		for (String word: words){
+			if (h.isEntity(word)){
+				namedEntities.add(word);
 			}
-		} 
+		}
+
+		return namedEntities;
 	}
 
 	public void prettyPrintNamedEntities() {

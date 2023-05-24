@@ -6,12 +6,12 @@ class apellido extends persona{
     apellido(String name, String category, int frequency, String nc, int id, String origen) {
         super(name, category, frequency, nc, id);
         this.origen = origen;
-        apellidoFrequency++;
+        apellidoFrequency+=frequency;
     }
 
     public void incFrequency() {
         super.incFrequency();
-        apellidoFrequency++;
+        apellidoFrequency+=frequency;
     }
 }
 
@@ -23,12 +23,12 @@ class nombre extends persona{
         super(name, category, frequency, nc, id);
         this.origen = origen;
         this.formasAlt = formasAlt;
-        nombreFrequency++;
+        nombreFrequency+=frequency;
     }
 
     public void incFrequency() {
         super.incFrequency();
-        nombreFrequency++;
+        nombreFrequency+=frequency;
     }
 }
 
@@ -38,12 +38,12 @@ class titulo extends persona{
     titulo(String name, String category, int frequency, String nc, int id, String profesional) {
         super(name, category, frequency, nc, id);
         this.profesional = profesional;
-        tituloFrequency++;
+        tituloFrequency+=frequency;
     }
 
     public void incFrequency() {
         super.incFrequency();
-        tituloFrequency++;
+        tituloFrequency+=frequency;
     }
 }
 
@@ -55,12 +55,12 @@ class pais extends lugar{
         super(name, category, frequency, nc);
         this.poblacion = poblacion;
         this.lenguaOficial = lenguaOficial;
-        paisFrequency++;
+        paisFrequency+=frequency;
     }
 
     public void incFrequency() {
         super.incFrequency();
-        paisFrequency++;
+        paisFrequency+=frequency;
     }
 }
 
@@ -74,12 +74,12 @@ class ciudad extends lugar{
         this.pais = pais;
         this.capital = capital;
         this.poblacion = poblacion;
-        ciudadFrequency++;
+        ciudadFrequency+=frequency;
     }
 
     public void incFrequency() {
         super.incFrequency();
-        ciudadFrequency++;
+        ciudadFrequency+=frequency;
     }
 }
 
@@ -89,12 +89,12 @@ class direccion extends lugar{
     direccion (String name, String category, int frequency, String nc, String ciudad) {
         super(name, category, frequency, nc);
         this.ciudad = ciudad;
-        direccionFrequency++;
+        direccionFrequency+=frequency;
     }
 
     public void incFrequency() {
         super.incFrequency();
-        direccionFrequency++;
+        direccionFrequency+=frequency;
     }
 }
 
@@ -104,11 +104,11 @@ class OtroLugar extends lugar{
     OtroLugar(String name, String category, int frequency, String nc, String comments) {
         super(name, category, frequency, nc);
         this.comments = comments;
-        OtroLugarFrequency++;
+        OtroLugarFrequency+=frequency;
     }
 
     public void incFrequency() {
         super.incFrequency();
-        OtroLugarFrequency++;
+        OtroLugarFrequency+=frequency;
     }
 }

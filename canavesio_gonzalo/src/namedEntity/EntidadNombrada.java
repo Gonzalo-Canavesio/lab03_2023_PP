@@ -1,10 +1,11 @@
 package namedEntity;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 
 /*Esta clase modela la nocion de entidad nombrada*/
 
-public class EntidadNombrada {
+public class EntidadNombrada implements Serializable {
 	String name;
 	String category;
 	int frequency;
@@ -17,7 +18,7 @@ public class EntidadNombrada {
 		this.category = category;
 		this.frequency = frequency;
 		this.tema = nombre_canonico;
-		EntidadNombradaFrequency++;
+		EntidadNombradaFrequency+=frequency;
 	}
 
 	public String getName() {
@@ -41,7 +42,9 @@ public class EntidadNombrada {
 	}
 
 	public void setFrequency(int frequency) {
+		Integer aux = this.frequency;
 		this.frequency = frequency;
+		EntidadNombradaFrequency = EntidadNombradaFrequency - aux + frequency;
 	}
 
 	public void incFrequency() {
