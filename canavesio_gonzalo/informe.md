@@ -2,7 +2,7 @@
 
 ## Modalidad
 
-En el proyecto de manera individual estaré utilizando la estrategia de "una inteligencia artificial especificamente orientada a código". En la sección del informe, estarán denotadas...
+En la sección individual del proyecto yo estaré utilizando la estrategia de "una inteligencia artificial especificamente orientada a código". En la sección del informe, estarán denotadas...
 > de la siguiente manera
 
 ...aquellas secciones/textos generados por coPilot y no por mí. Intentaré que la mayor parte del informe/investigación para entender Spark sea generada por coPilot y en casos de necesitar fuentes externas o agregar explicaciones propias, lo haré con formato normal.
@@ -14,14 +14,78 @@ Estas preguntas me ayudaron a entender mejor como encarar la parte individual de
 > ### ¿Cómo se instala Apache Spark con Java en Windows?
 > Para instalar Apache Spark con Java en Windows, primero hay que descargar el archivo .tgz de la página oficial de Apache Spark. Luego, hay que descomprimirlo en la carpeta que se desee. Por último, hay que configurar las variables de entorno para que el sistema operativo pueda encontrar los archivos de Spark.
 
-Realicé todos los pasos anteriores hasta la descompresión del archivo .tgz. Al hacerlo me encontré con una carpeta jars, la cual copie su contenido en la carpeta lib de mi proyecto de Java.
+Realicé todos los pasos anteriores hasta la descompresión del archivo .tgz. Al hacerlo me encontré con una carpeta jars, la cual copie su contenido en la carpeta lib de mi proyecto de Java. Por el momento eso parece funcionar
 
 > ### ¿Que estructura tiene un programa de Spark?
 > Un programa de Spark tiene una estructura de flujo de datos. En este flujo de datos, se pueden distinguir dos tipos de operaciones: las operaciones de transformación y las operaciones de acción. Las operaciones de transformación son aquellas que toman un RDD y devuelven otro RDD. Las operaciones de acción son aquellas que toman un RDD y devuelven un valor.
 > 
 > Un RDD es una colección de elementos que se distribuyen a través de los nodos del cluster. Los RDDs son inmutables, es decir, que no se pueden modificar. Los RDDs se pueden crear a partir de archivos o de colecciones de datos en memoria.
 
-Literalmente no entendí nada.
+Literalmente no entendí nada. Voy a probar otras preguntas para ver si puedo entender mejor.
+
+> #### ¿Cómo utilizar Spark en Java?
+> Para utilizar Spark en Java, hay que crear un SparkContext. El SparkContext es el punto de entrada a Spark. El SparkContext se puede crear a partir de un SparkConf. El SparkConf es una clase que se utiliza para configurar el SparkContext. El SparkContext se puede utilizar para crear RDDs a partir de archivos o de colecciones de datos en memoria. Los RDDs se pueden transformar utilizando operaciones de transformación. Los RDDs se pueden utilizar para realizar operaciones de acción.
+
+Esto me ayudó a entender un poco más la estructura de un programa de Spark. Voy a seguir explorando.
+
+> #### ¿Que librerias básicas se utilizan en Spark para Java?
+> - org.apache.spark.SparkConf
+> - org.apache.spark.SparkContext
+> - org.apache.spark.api.java.JavaSparkContext
+> - org.apache.spark.api.java.JavaRDD
+> - org.apache.spark.api.java.JavaPairRDD
+> - org.apache.spark.api.java.JavaDoubleRDD
+> - org.apache.spark.api.java.JavaFutureAction
+> - org.apache.spark.api.java.JavaSparkStatusTracker
+> - org.apache.spark.api.java.JavaStreamingContext
+> - org.apache.spark.api.java.JavaDStream
+
+Estoy seguro que varias de esas librerias no las voy a utilizar, pero me sirve para tener una idea de que librerias voy a necesitar. Probablemente importe todas las librerias y luego vaya borrando las que no necesite.
+
+> #### ¿Que son las operaciones de transformación y de acción en Spark?
+> Las operaciones de transformación son aquellas que toman un RDD y devuelven otro RDD. Las operaciones de acción son aquellas que toman un RDD y devuelven un valor. Por ejemplo la operación map es una operación de transformación que toma un RDD y devuelve otro RDD. Por ejemplo la operación reduce es una operación de acción que toma un RDD y devuelve un valor.
+
+Entiendo un poco más la diferencia entre las operaciones de transformación y de acción. Voy a intentar que coPilot me explique las principales operaciones de transformación y de acción.
+
+> #### ¿Cuáles son las principales operaciones de transformación en Spark y cómo se utilizan?
+> Las principales operaciones de transformación en Spark son map, flatMap, filter, reduceByKey, groupByKey, sortByKey, join, cogroup, cartesian y sample. 
+> - La operación map toma un RDD y devuelve otro RDD. La operación map se utiliza para transformar cada elemento de un RDD en otro elemento.
+> - La operación flatMap toma un RDD y devuelve otro RDD. La operación flatMap se utiliza para transformar cada elemento de un RDD en cero o más elementos.
+> - La operación filter toma un RDD y devuelve otro RDD. La operación filter se utiliza para filtrar los elementos de un RDD.
+> - La operación reduceByKey toma un RDD y devuelve otro RDD. La operación reduceByKey se utiliza para reducir los elementos de un RDD por clave.
+> - La operación groupByKey toma un RDD y devuelve otro RDD. La operación groupByKey se utiliza para agrupar los elementos de un RDD por clave.
+> - La operación sortByKey toma un RDD y devuelve otro RDD. La operación sortByKey se utiliza para ordenar los elementos de un RDD por clave.
+> - La operación join toma dos RDDs y devuelve otro RDD. La operación join se utiliza para unir dos RDDs por clave.
+> - La operación cogroup toma dos RDDs y devuelve otro RDD. La operación cogroup se utiliza para agrupar dos RDDs por clave.
+> - La operación cartesian toma dos RDDs y devuelve otro RDD. La operación cartesian se utiliza para obtener el producto cartesiano de dos RDDs.
+> - La operación sample toma un RDD y devuelve otro RDD. La operación sample se utiliza para obtener una muestra aleatoria de un RDD.
+
+Esto me ayudó a entender mejor las operaciones de transformación. Voy a intentar que coPilot ahora me explique las principales operaciones de acción.
+
+> #### ¿Cuáles son las principales operaciones de acción en Spark y cómo se utilizan?
+> Las principales operaciones de acción en Spark son collect, count, countByKey, take, takeSample, reduce, fold, aggregate, saveAsTextFile, saveAsSequenceFile, saveAsObjectFile, foreach, foreachPartition, first, top.
+> - La operación collect toma un RDD y devuelve una colección. La operación collect se utiliza para obtener todos los elementos de un RDD.
+> - La operación count toma un RDD y devuelve un valor. La operación count se utiliza para obtener la cantidad de elementos de un RDD.
+> - La operación countByKey toma un RDD y devuelve un valor. La operación countByKey se utiliza para obtener la cantidad de elementos de un RDD por clave.
+> - La operación take toma un RDD y devuelve una colección. La operación take se utiliza para obtener los primeros elementos de un RDD.
+> - La operación takeSample toma un RDD y devuelve una colección. La operación takeSample se utiliza para obtener una muestra aleatoria de un RDD.
+> - La operación reduce toma un RDD y devuelve un valor. La operación reduce se utiliza para reducir los elementos de un RDD.
+> - La operación fold toma un RDD y devuelve un valor. La operación fold se utiliza para reducir los elementos de un RDD.
+> - La operación aggregate toma un RDD y devuelve un valor. La operación aggregate se utiliza para reducir los elementos de un RDD.
+> - La operación saveAsTextFile toma un RDD y devuelve un valor. La operación saveAsTextFile se utiliza para guardar un RDD en un archivo de texto.
+> - La operación saveAsSequenceFile toma un RDD y devuelve un valor. La operación saveAsSequenceFile se utiliza para guardar un RDD en un archivo de secuencia.
+> - La operación saveAsObjectFile toma un RDD y devuelve un valor. La operación saveAsObjectFile se utiliza para guardar un RDD en un archivo de objetos.
+> - La operación foreach toma un RDD y devuelve un valor. La operación foreach se utiliza para aplicar una función a cada elemento de un RDD.
+> - La operación foreachPartition toma un RDD y devuelve un valor. La operación foreachPartition se utiliza para aplicar una función a cada partición de un RDD.
+> - La operación first toma un RDD y devuelve un valor. La operación first se utiliza para obtener el primer elemento de un RDD.
+> - La operación top toma un RDD y devuelve una colección. La operación top se utiliza para obtener los primeros elementos de un RDD.
+
+Son muchisimas operaciones de acción las que me dió copilot, no sé si todas son operaciones de acción o si alguna de estas operaciones es producto de una alucinación de coPilot. Voy a preguntarle un poco sobre los RDD.
+
+> #### ¿Qué es un RDD?
+> Un RDD es una colección de elementos que se pueden dividir en particiones. Un RDD es inmutable, es decir, no se puede modificar una vez creado. Un RDD es tolerante a fallos, es decir, si una partición falla, se puede recuperar de la partición anterior. Un RDD es distribuido, es decir, se puede distribuir en diferentes nodos. Un RDD es persistente, es decir, se puede almacenar en memoria o en disco. Un RDD es paralelo, es decir, se puede procesar en paralelo.
+
+Según lo que dice coPilot, un RDD es como una lista/conjunto de elementos con ciertas propiedades que ayudan a el procesamiento de los datos de manera distribuida.
 
 > ### ¿Qué estructura tiene un programa de conteo de palabras en diferentes documentos en Spark?
 > Un programa de conteo de palabras en diferentes documentos en Spark tiene la siguiente estructura: 
@@ -33,27 +97,26 @@ Literalmente no entendí nada.
 > 6. Se realiza un collect para obtener el resultado.
 > 7. Se cierra el SparkContext.
 
-El primer renglón fue fácil de generar, todo lo demás fue necesario escribir el "1." para que coPilot me sugiera el siguiente paso.
+El primer renglón fue fácil de generar, todo lo demás fue necesario escribir el "1." para que coPilot me sugiera el siguiente paso. 
+
+Me parece que podré aprovechar la estructura anterior para identificar las entidades nombradas y sumar el número de ocurrencias de cada una.
 
 > ### ¿Cómo se integra una estructura orientada a objetos con la estructura funcional de map-reduce?
-> Una estructura orientada a objetos se puede integrar con la estructura funcional de map-reduce a través de la programación funcional. La programación funcional es un paradigma de programación que trata a las funciones como ciudadanos de primera clase. Esto significa que las funciones se pueden asignar a variables, se pueden pasar como argumentos y se pueden devolver como valores de otras funciones. La programación funcional se puede utilizar para implementar la estructura funcional de map-reduce.
+> Una estructura orientada a objetos se puede integrar con la estructura funcional de map-reduce utilizando la función map para transformar los objetos en pares clave-valor y la función reduceByKey para reducir los valores de los pares clave-valor.
 
-Literalmente no me dijo nada.
-
-> ### ¿Que cosas debo importar para poder utilizar Spark en Java?
-> Para poder utilizar Spark en Java, hay que importar las siguientes clases:
-> - org.apache.spark.SparkConf
-> - org.apache.spark.api.java.JavaSparkContext
-> - org.apache.spark.api.java.JavaRDD
-> - org.apache.spark.api.java.function.Function
-> - org.apache.spark.api.java.function.FlatMapFunction
-> - org.apache.spark.api.java.function.PairFunction
-> - org.apache.spark.api.java.function.Function2
-> - org.apache.spark.api.java.function.VoidFunction
-
-Estoy seguro que la mitad de las clases que me sugirió no son necesarias.
+Tristemente coPilot me dio una respuesta muy general, espero que esto no me presente problemas durante el desarrollo.
 
 ## Realización del proyecto
 
+Una vez ya con las ideas claras gracias a las preguntas anteriores, comencé a desarrollar los cambios en el proyecto.
 
-
+El proceso de desarrollo fue el siguiente:
+1. Me senté a analizar el código que ya tenia y como adaptarlo para que funcionara con Spark de manera distribuida. Después de pensar un rato decidi que me apoyaría en la estructura que me sugirió coPilot para un programa de conteo de palabras en diferentes documentos en Spark. La estructura iba a ser la siguiente:
+   1. Se crea un SparkContext y un RDD a partir de los textos de los articulos.
+   2. Se realiza un flatMap para separar las palabras de cada línea.
+   3. Se realiza un map para asignarle a cada palabra un valor de 1.
+   4. Se realiza un reduceByKey para sumar los valores de las palabras.
+   5. Se realiza un collect para obtener el resultado.
+   6. Se cierra el SparkContext.
+2. Una vez que tuve la estructura, comencé a escribir el código. En esta parte coPilot me hizo varias sugerencias que me ayudaron a escribir el código más rápido y modificaron un poco la estructura que había pensado.
+3. SEGUIR ESCRIBIENDO QUE FALTA EXPLICACION
