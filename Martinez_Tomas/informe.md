@@ -8,6 +8,7 @@ Utilizare esta estrategia realizando preguntas acerca de las preguntas y las uti
 ## Preguntas
 
 > ### ¿Cómo se instala Spark en una computadora personal?
+
 Primero que nada para poder instalarlo en mi nootebook con ubuntu le hice la sig pregunta a chatGPT:
 ![Pregunta en ingles, sobre como instalar spark](/home/tomas22/Imágenes/instalar_spark01.png)
 Luego me dio la siguiente respuesta la cual segui paso a paso:
@@ -18,12 +19,13 @@ Aca me dice que me descarge en la pagina oficial de spark y descarge la version 
 ![Descomprimir y configurar](/home/tomas22/Imágenes/instalar_spark04.png)
 Aca descomprimo tal como me dice que lo haga, en este caso utilizando el nombre adecuado del archivo que tenga y dsp moverlo a la carpeta de opt.
 Despues me dice que tengo que configurar las variables de entorno, con el codigo que me da.
-![Configurar variables de entorno y verificar instalacion](/home/tomas22/Imágenes/instalar_spark05.png) 
+![Configurar variables de entorno y verificar instalacion](/home/tomas22/Imágenes/instalar_spark05.png)
 Por ultmo me dice que agrege esas lineas al final del codigo de bashrc, guardarlos y subirlos, y despues verificar que este todo en orden ejecutando ese comando.
 Al hacerlo claramente esta todo bien.
 ![Verificar instalacion](/home/tomas22/Imágenes/instalar_spark06.png)
 
 > ### ¿Qué estructura tiene un programa en Spark?
+
 Primero que nada le realizo la pregunta:
 ![Pregunta en ingles, sobre la estructura de un programa en spark](/home/tomas22/Imágenes/Estructura01.png)
 Y me dice lo siguiente, voy a ir comentando el proceso:
