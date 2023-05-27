@@ -1,6 +1,6 @@
 # Compiler options
 JAVAC = javac
-JFLAGS = -cp lib/json-20230227.jar:lib/
+JFLAGS = -cp lib/json-20230227.jar:lib/spark-core_2.13-3.3.0.jar
 
 # Source directory
 SRCDIR = src

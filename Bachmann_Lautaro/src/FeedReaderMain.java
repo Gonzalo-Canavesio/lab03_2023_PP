@@ -8,6 +8,8 @@ import namedEntity.heuristic.Heuristic;
 import namedEntity.heuristic.QuickHeuristic;
 import feed.*;
 import java.util.List;
+import org.apache.spark.api.java.*;
+import org.apache.spark.api.java.function.*;
 
 public class FeedReaderMain {
 
