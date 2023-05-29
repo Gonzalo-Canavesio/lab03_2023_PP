@@ -48,5 +48,5 @@ interface Internacional extends Politica {
 interface OtrosPolitica extends Politica {
 }
 
-interface Otros extends Tema {
+interface Otro extends Tema {
 }

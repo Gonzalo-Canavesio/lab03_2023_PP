@@ -1,7 +1,6 @@
 package namedEntity;
 
-import namedEntity.heuristic.Heuristic;
-import namedEntity.heuristic.QuickHeuristic;
+import java.lang.reflect.Field;
 
 /*Esta clase modela la nocion de entidad nombrada*/
 
@@ -10,20 +9,15 @@ public class EntidadNombrada {
 	String category;
 	int frequency;
 	String tema;
-	private static int count = 0;
 	static protected int EntidadNombradaFrequency = 0;
 
-	public EntidadNombrada(String name, String category, int frequency) {
+	public EntidadNombrada(String name, String category, int frequency, String nombre_canonico) {
 		super();
 		this.name = name;
 		this.category = category;
 		this.frequency = frequency;
+		this.tema = nombre_canonico;
 		EntidadNombradaFrequency++;
-		count++;
-	}
-
-	public static int getCount() {
-		return count;
 	}
 
 	public String getName() {
@@ -52,6 +46,7 @@ public class EntidadNombrada {
 
 	public void incFrequency() {
 		this.frequency++;
+		EntidadNombradaFrequency++;
 	}
 
 	public int getEntidadNombradaFrequency() {
@@ -66,9 +61,27 @@ public class EntidadNombrada {
 	public String toString() {
 		return "ObjectNamedEntity [name=" + name + ", frequency=" + frequency + "]";
 	}
+
 	public void prettyPrint(){
-		System.out.println(this.getName() + " " + this.getFrequency());
-	}
+        Class<?> clazz = getClass();
+        Field[] fields = clazz.getDeclaredFields();
+
+        for (Field field : fields) {
+            field.setAccessible(true); // Enable access to private fields
+
+            String fieldName = field.getName();
+            Object fieldValue;
+            try {
+                fieldValue = field.get(this); // Get the field value for the current instance
+            } catch (IllegalAccessException e) {
+                fieldValue = "N/A";
+            }
+			if(fieldName != "EntidadNombradaFrequency"){ 
+            	System.out.println(fieldName + ": " + fieldValue);
+			}
+        }
+		System.out.println("**********************************************************************************************");
+    }
 
 	public void setTema(String tema) {
         this.tema = tema;
@@ -78,20 +91,53 @@ public class EntidadNombrada {
         return this.tema;
 	}
 
-	public EntidadNombrada createEntity(String namedEntity){
-		EntidadNombrada ne;
-		Heuristic h = new QuickHeuristic(); // Da igual que heuristica se use, ya que solo se usa para obtener la categoria
-		String category = h.getCategory(namedEntity);
-		// TODO: Crear una entidad nombrada de la categoria correspondiente y devolverla (Ver como hacer para que el constructor no de problema)
-		if(category == null){
-			ne = new EntidadNombrada(namedEntity, "unknown", 1);
-		} else if(category == "persona"){
-			ne = new persona(namedEntity, "persona", 1, 0);
-		} else {
-			ne = new EntidadNombrada(namedEntity, "unknown", 1);
-		}
-		return ne;
+public void reduceFrequency(){
+		this.frequency--;
+		EntidadNombradaFrequency--;
+	}
+
+	public void prettyPrintFrecuencias(){
+		System.out.println("**********************************************************************************************");
+		System.out.println("Frecuencias clases: ");
+		System.out.println("**********************************************************************************************");
+		System.out.println("Frecuencia total: " + EntidadNombradaFrequency);
+		System.out.println("Frecuencia de personas: " + persona.personaFrequency);
+		System.out.println("Frecuencia de lugares: " + lugar.lugarFrequency);
+		System.out.println("Frecuencia de organizaciones: " + organizacion.organizacionFrequency);
+		System.out.println("Frecuencia de productos: " + producto.productoFrequency);
+		System.out.println("Frecuencia de eventos: " + evento.eventoFrequency);
+		System.out.println("Frecuencia de fechas: " + fecha.fechaFrequency);
+		System.out.println("Frecuencia de otros: " + otro.otroFrequency);
+		System.out.println("**********************************************************************************************");
+		System.out.println("Frecuencias sublcases: ");
+		System.out.println("**********************************************************************************************");	
+		System.out.println("Frecuencia de nombres: " + nombre.nombreFrequency);
+		System.out.println("Frecuencia de apellidos: " + apellido.apellidoFrequency);
+		System.out.println("Frecuencia de titulos: " + titulo.tituloFrequency);
+		System.out.println("Frecuencia de pais: " + pais.paisFrequency);
+		System.out.println("Frecuencia de ciudad: " + ciudad.ciudadFrequency);
+		System.out.println("Frecuencia de direccion: " + direccion.direccionFrequency);
+		System.out.println("Frecuencia de OtrosLugares: " + OtroLugar.OtroLugarFrequency);
+		System.out.println("**********************************************************************************************");
+		System.out.println("Frecuencias subclases con temas: ");
+		System.out.println("**********************************************************************************************");
+		System.out.println("Frecuencia de apellidos futbol: " + apellidoFutbol.apellidoFutbolFrequency);
+		System.out.println("Frecuencia de apellidos cine: " + apellidoCine.apellidoCineFrequency);
+		System.out.println("Frecuencia de apellidos nacional: " + apellidoNacional.apellidoNacionalFrequency);
+		System.out.println("Frecuencia de nombres futbol: " + nombreFutbol.nombreFutbolFrequency);
+		System.out.println("Frecuencia de nombres cine: " + nombreCine.nombreCineFrequency);
+		System.out.println("Frecuencia de nombres nacional: " + nombreNacional.nombreNacionalFrequency);
+		System.out.println("Frecuencia de pais futbol: " + paisFutbol.paisFutbolFrequency);
+		System.out.println("Frecuencia de pais cine: " + paisCine.paisCineFrequency);
+		System.out.println("Frecuencia de pais nacional: " + paisNacional.paisNacionalFrequency);
+		System.out.println("Frecuencia de ciudad futbol: " + ciudadFutbol.ciudadFutbolFrequency);
+		System.out.println("Frecuencia de ciudad cine: " + ciudadCine.ciudadCineFrequency);
+		System.out.println("Frecuencia de ciudad nacional: " + ciudadNacional.ciudadNacionalFrequency);
+		System.out.println("**********************************************************************************************");
 	}
 }
+
+
+
 
 

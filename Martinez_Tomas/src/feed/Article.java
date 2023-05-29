@@ -1,12 +1,11 @@
 package feed;
 
-import namedEntity.EntidadNombrada;
-import namedEntity.heuristic.Heuristic;
-import namedEntity.heuristic.QuickHeuristic;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import namedEntity.*;
+import namedEntity.heuristic.Heuristic;
 
 /*Esta clase modela el contenido de un articulo (ie, un item en el caso del rss feed) */
 
@@ -87,11 +86,12 @@ public class Article {
 		for (String s: text.split(" ")) {
 			if (h.isEntity(s)){
 				EntidadNombrada ne = this.getNamedEntity(s);
-				if ( ne == null) {
-					 ne = ne.createEntity(s);
-					namedEntityList.add(lol);
-				}else {
+				if (ne != null) {
 					ne.incFrequency();
+				}else {
+					CreadorEntidades ce = new CreadorEntidades();
+					ne = ce.createEntity(s);
+					namedEntityList.add(ne);
 				}
 			}
 		} 
@@ -102,7 +102,7 @@ public class Article {
 		System.out.println("Named Entities: ");
 		System.out.println("**********************************************************************************************");
 		for (EntidadNombrada n: namedEntityList){
-			System.out.println(n.getName() + " " + n.getFrequency() + " " + n.getCategory());
+			n.prettyPrint();
 		}
 		System.out.println("**********************************************************************************************");
 	}
@@ -113,20 +113,18 @@ public class Article {
 		System.out.println("Publication Date: " + this.getPublicationDate());
 		System.out.println("Link: " + this.getLink());
 		System.out.println("Text: " + (this.getText().length() > 256 ? this.getText().substring(0, 255) + "..." : this.getText()).replace("\n", " "));
-		System.out.println("Entities: " + namedEntityList.size() + " " + namedEntityList.toString());
 		System.out.println("**********************************************************************************************");
 		
 	}
 	
 	public static void main(String[] args) {
-		Article a = new Article("This Historically Black University Created Its Own Tech Intern Pipeline",
-				"A new program at Bowie State connects computing students directly with companies, bypassing an often harsh Silicon Valley vetting process",
-				new Date(),
-				"https://www.nytimes.com/2023/04/05/technology/bowie-hbcu-tech-intern-pipeline.html"
-		);
-		Heuristic h = new QuickHeuristic();
-		a.computeNamedEntities(h);
-		a.prettyPrint();
+		  Article a = new Article("This Historically Black University Created Its Own Tech Intern Pipeline",
+			  "A new program at Bowie State connects computing students directly with companies, bypassing an often harsh Silicon Valley vetting process",
+			  new Date(),
+			  "https://www.nytimes.com/2023/04/05/technology/bowie-hbcu-tech-intern-pipeline.html"
+			  );
+		 
+		  a.prettyPrint();
 	}
 	
 	

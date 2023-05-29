@@ -59,7 +59,7 @@ public class FeedReaderMain {
 			List<RoughFeed> roughFeeds = httpRequester.getFeeds();
 
 			// Llamar al Parser especifico para extraer los datos necesarios por la aplicacion, instanciar los feeds
-			Heuristic heuristica = new QuickHeuristic();
+			Heuristic heuristica = new QuickHeuristic(); // Si se quiere cambiar la heuristica, modificar esta linea
 			for(RoughFeed roughFeed : roughFeeds){
                 Feed feed = doParse(roughFeed);
 				// Extraer las entidades nombradas solo de los feeds RSS porque el texto de los feeds de Reddit bugea la heuristica
@@ -72,8 +72,10 @@ public class FeedReaderMain {
 			}
 			// Imprimir las entidades nombradas
 			Article articuloVacio = new Article(null, null, null, null);
-			articuloVacio.prettyPrintNamedEntities();
-			// TODO: Imprimir las frecuencias de las entidades nombradas		
+			articuloVacio.prettyPrintNamedEntities();	
+			EntidadNombrada prettyPrint = new EntidadNombrada(null, null, 1, null);
+			prettyPrint.reduceFrequency();
+			prettyPrint.prettyPrintFrecuencias();
 		}else {
 			printHelp();
 		}
