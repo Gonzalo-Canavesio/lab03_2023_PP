@@ -77,7 +77,23 @@ En base al ejemplo encontrado, interpreto que la estructura es la siguiente:
 
 No encontré nada sobre programas de conteo de palabras en diferentes documentos.
 
-## (TODO) ¿Cómo adaptar el código del Laboratorio 2 a la estructura del programa objetivo en Spark?
+## ¿Cómo adaptar el código del Laboratorio 2 a la estructura del programa objetivo en Spark?
+
+Busquedas:
+- how to adapto a project to use spark
+- how to start using spark on an existing project
+- moving to spark on java
+- migrate existing project to use spark java
+
+Lo mas cercano a lo que buscaba fue [esto](https://developer.ibm.com/articles/migrating-legacy-applications-to-apache-spark/)
+pero aparte de eso no encontré nada que me sirva o que explique como adaptar
+un proyecto existente a spark.
+
+Lo que se me ocurre es intentar adaptar la clase principal del proyecto a la
+estructura general de un programa spark discutida en otras preguntas del informe.
+
+Quizas usando como regla general el reemplazar bucles 'for' por maps o reduces
+siempre que se pueda.
 
 ## ¿Cómo se integra una estructura orientada a objetos con la estructura funcional de map-reduce?
 Como la pregunta a esta respuesta creo haberla encontrado previamente busqué lo siguiente:
@@ -93,3 +109,12 @@ En otras palabras, como java no permite las funciones anonimas o de primera clas
 heredar de un objeto de la libreria Spark que representa a una funcion
 
 [Fuente](https://spark.apache.org/docs/0.9.1/java-programming-guide.html)
+
+# Proceso de desarrollo
+Mi idea inicial es intentar adaptar la clase principal del proyecto a la estructura
+general de un programa spark de manera iterativa, adaptando cada funcionalidad
+de a poco y centrarme en reemplazar bucles 'for' por maps o reduces de ser posible.
+
+Ire explicando los cambios que voy haciendo y de donde voy sacando la informacion
+para saber que hacer.
+
