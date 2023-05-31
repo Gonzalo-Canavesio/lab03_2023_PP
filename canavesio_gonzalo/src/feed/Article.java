@@ -15,16 +15,22 @@ public class Article implements Serializable {
 	private String text;
 	private Date publicationDate;
 	private String link;
+	private String type;
 	
 	private static List<EntidadNombrada> namedEntityList = new ArrayList<EntidadNombrada>();
 	
 	
-	public Article(String title, String text, Date publicationDate, String link) {
+	public Article(String title, String text, Date publicationDate, String link, String type) {
 		super();
 		this.title = title;
 		this.text = text;
 		this.publicationDate = publicationDate;
 		this.link = link;
+		this.type = type;
+	}
+
+	public String getType() {
+		return type;
 	}
 
 	public String getTitle() {
@@ -121,7 +127,7 @@ public class Article implements Serializable {
 			  "A new program at Bowie State connects computing students directly with companies, bypassing an often harsh Silicon Valley vetting process",
 			  new Date(),
 			  "https://www.nytimes.com/2023/04/05/technology/bowie-hbcu-tech-intern-pipeline.html"
-			  );
+			  , "rss");
 		 
 		  a.prettyPrint();
 	}

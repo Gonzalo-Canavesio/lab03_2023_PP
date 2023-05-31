@@ -6,13 +6,19 @@ import subscription.Subscription;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class httpRequester {
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaSparkContext;
+
+import org.apache.spark.api.java.JavaRDD;
+
+public class httpRequester implements Serializable{
 	private Subscription subscription;
 
 	public httpRequester(Subscription subscription){
@@ -20,19 +26,40 @@ public class httpRequester {
 	}
 
 	public List<RoughFeed> getFeeds(){
-		List<RoughFeed> roughFeeds = new ArrayList<RoughFeed>();
-		for(SingleSubscription singleSubscription : this.subscription.getSubscriptionsList()){
+		// List<RoughFeed> roughFeeds = new ArrayList<RoughFeed>();
+		// for(SingleSubscription singleSubscription : this.subscription.getSubscriptionsList()){
+		// 	String urlType = singleSubscription.getUrlType();
+		// 	String feed = null;
+		// 	for(int i = 0; i < singleSubscription.getUrlParamsSize(); i++){
+		// 		feed = this.getFeed(singleSubscription.getFeedToRequest(i));
+		// 		if(feed != null){
+		// 			RoughFeed roughFeed = new RoughFeed(urlType, singleSubscription.getUrlParams(i), feed);
+		// 			roughFeeds.add(roughFeed);
+		// 		}
+		// 	}
+		// }
+		// Adaptar el código anterior para que utilice Spark
+		SparkConf conf = new SparkConf().setAppName("FeedReader").setMaster("local");
+		JavaSparkContext sc = new JavaSparkContext(conf);
+		
+		JavaRDD<SingleSubscription> subscriptions = sc.parallelize(this.subscription.getSubscriptionsList());
+		JavaRDD<RoughFeed> roughFeeds = subscriptions.flatMap(singleSubscription -> {
+			List<RoughFeed> roughFeedsList = new ArrayList<RoughFeed>();
 			String urlType = singleSubscription.getUrlType();
 			String feed = null;
 			for(int i = 0; i < singleSubscription.getUrlParamsSize(); i++){
 				feed = this.getFeed(singleSubscription.getFeedToRequest(i));
 				if(feed != null){
 					RoughFeed roughFeed = new RoughFeed(urlType, singleSubscription.getUrlParams(i), feed);
-					roughFeeds.add(roughFeed);
+					roughFeedsList.add(roughFeed);
 				}
 			}
-		}
-		return roughFeeds;
+			return roughFeedsList.iterator();
+		});
+
+		List<RoughFeed> roughFeedsList = roughFeeds.collect();
+		sc.close();
+		return roughFeedsList;
 	}
 
 	public String getFeed(String urlFeed){
