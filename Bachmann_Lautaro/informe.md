@@ -111,10 +111,32 @@ heredar de un objeto de la libreria Spark que representa a una funcion
 [Fuente](https://spark.apache.org/docs/0.9.1/java-programming-guide.html)
 
 # Proceso de desarrollo
+## Metodologia
 Mi idea inicial es intentar adaptar la clase principal del proyecto a la estructura
 general de un programa spark de manera iterativa, adaptando cada funcionalidad
 de a poco y centrarme en reemplazar bucles 'for' por maps o reduces de ser posible.
 
 Ire explicando los cambios que voy haciendo y de donde voy sacando la informacion
-para saber que hacer.
+para saber que hacer en los commits que voy creando.
+
+Probablemente me base fuertemente en [esta](https://spark.apache.org/docs/latest/rdd-programming-guide.html#initializing-spark)
+pagina de documentacion de Spark.
+
+## Error al compilar
+```
+************* FeedReader version 1.0 *************
+Exception in thread "main" java.lang.NoClassDefFoundError: scala/MatchError
+      at FeedReaderMain.main(FeedReaderMain.java:45)
+Caused by: java.lang.ClassNotFoundException: scala.MatchError
+      at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:581)
+      at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+      at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:522)
+      ... 1 more
+```
+Despues de varias horas de sufrimiento e intentar varias soluciones (reinstalar spark, ver dependencias
+, crear contenedor docker, etc) finalmente pude hacer que el programa compile
+al empezar a usar la herramienta maven.
+
+Para configurar maven me basé principalmente en este [link](https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html)
+
 
