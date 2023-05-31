@@ -1,7 +1,8 @@
 package httpRequest;
+import java.io.Serializable;
 
-public class RoughFeed {
-    
+public class RoughFeed implements Serializable {
+
     private String urlType;
     private String urlParam;
     private String feed;

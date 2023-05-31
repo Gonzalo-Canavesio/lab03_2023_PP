@@ -139,4 +139,13 @@ al empezar a usar la herramienta maven.
 
 Para configurar maven me basé principalmente en este [link](https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html)
 
+## Confusion sobre funcionamiento
+Cuando reemplace el for del main que se encargaba de imprimir el texto de los posts por un map y un foreach,
+en un principio pensé que no estaba teniendo efecto el map, ya que cuando
+ejecutaba el programa aparecian todos los atributos del RoughFeed al hacer
+un prettyprint (o eso era lo que yo pensaba).
+
+Sin embargo, una vez me fijé bien el output me di cuenta de que se debia a un
+error porque la clase RoughFeed no implementa la interfaz `Serializable`.
+Una vez solucionado eso, comenzó a funcionar correctamente.
 
