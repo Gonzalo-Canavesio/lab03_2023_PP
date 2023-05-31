@@ -46,17 +46,17 @@ public class FeedReaderMain {
         JavaSparkContext sc = new JavaSparkContext(conf);
 
         // crear RDD de feeds
-        //JavaRDD<RoughFeed> distData = sc.parallelize(roughFeeds);
+        JavaRDD<RoughFeed> roughFeedsRDD = sc.parallelize(roughFeeds);
+        JavaRDD<Feed> parsedFeeds = roughFeedsRDD.map(feed -> doParse(feed));
 
 		if (args.length == 0) {
 			// Llamar al Parser especifico para extraer los datos necesarios por la aplicacion, instanciar los feeds e imprimirlos
-			for(RoughFeed roughFeed : roughFeeds){
-                Feed feed = doParse(roughFeed);
-				if(feed != null){
-					feed.prettyPrint();
-				}
-			}
-
+            parsedFeeds.foreach(feed -> {
+                if (feed != null) {
+                    feed.prettyPrint();
+                }
+            }
+                        );
 		} else if (args.length == 1 && args[0].equals("-ne")){
 
 			// Llamar al Parser especifico para extraer los datos necesarios por la aplicacion, instanciar los feeds
