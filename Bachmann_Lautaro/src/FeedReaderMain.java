@@ -32,16 +32,15 @@ public class FeedReaderMain {
 
 	public static void main(String[] args) {
 		System.out.println("************* FeedReader version 1.0 *************");
+        // Leer el archivo de suscription por defecto y parsearlo
+        JSONParser subscriptionParser = new JSONParser();
+        Subscription subscription = subscriptionParser.parse("config/subscriptions.json");
+
+        // Llamar al httpRequester para obtener el feed del servidor
+        httpRequester httpRequester = new httpRequester(subscription);
+        List<RoughFeed> roughFeeds = httpRequester.getFeeds();
+
 		if (args.length == 0) {
-
-			// Leer el archivo de suscription por defecto y parsearlo
-			JSONParser subscriptionParser = new JSONParser();
-			Subscription subscription = subscriptionParser.parse("config/subscriptions.json");
-
-			// Llamar al httpRequester para obtener el feed del servidor
-			httpRequester httpRequester = new httpRequester(subscription);
-			List<RoughFeed> roughFeeds = httpRequester.getFeeds();
-
 			// Llamar al Parser especifico para extraer los datos necesarios por la aplicacion, instanciar los feeds e imprimirlos
 			for(RoughFeed roughFeed : roughFeeds){
                 Feed feed = doParse(roughFeed);
@@ -51,14 +50,6 @@ public class FeedReaderMain {
 			}
 
 		} else if (args.length == 1 && args[0].equals("-ne")){
-
-			// Leer el archivo de suscription por defecto y parsearlo
-			JSONParser subscriptionParser = new JSONParser();
-			Subscription subscription = subscriptionParser.parse("config/subscriptions.json");
-
-			// Llamar al httpRequester para obtener el feed del servidor
-			httpRequester httpRequester = new httpRequester(subscription);
-			List<RoughFeed> roughFeeds = httpRequester.getFeeds();
 
 			// Llamar al Parser especifico para extraer los datos necesarios por la aplicacion, instanciar los feeds
 			Heuristic heuristica = new QuickHeuristic(); // Si se quiere cambiar la heuristica, modificar esta linea
