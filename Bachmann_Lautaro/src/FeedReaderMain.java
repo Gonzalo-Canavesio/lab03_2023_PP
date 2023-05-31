@@ -42,8 +42,11 @@ public class FeedReaderMain {
         List<RoughFeed> roughFeeds = httpRequester.getFeeds();
 
         // inicializar spark
-        SparkConf conf = new SparkConf().setAppName(appName).setMaster(master);
+        SparkConf conf = new SparkConf().setAppName("EntityParser").setMaster("local[*]");
         JavaSparkContext sc = new JavaSparkContext(conf);
+
+        // crear RDD de feeds
+        JavaRDD<RoughFeed> distData = sc.parallelize(roughFeeds);
 
 		if (args.length == 0) {
 			// Llamar al Parser especifico para extraer los datos necesarios por la aplicacion, instanciar los feeds e imprimirlos
