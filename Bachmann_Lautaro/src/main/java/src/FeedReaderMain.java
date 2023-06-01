@@ -63,11 +63,20 @@ public class FeedReaderMain {
                 .map(feed -> doParse(feed))
                 .filter(feed -> feed != null)
                 .flatMap(feed -> feed.getArticleList().iterator());
-            articles.foreach(article -> article.computeNamedEntities(heuristica));
+            articles.foreach(article -> article.computeNamedEntities(heuristica, sc));
 
 			// Imprimir las entidades nombradas
-			Article articuloVacio = new Article(null, null, null, null);
-			articuloVacio.prettyPrintNamedEntities();
+            final JavaRDD<String> words = lines.flatMap(s -> Arrays.asList(SPACE.split(s)));
+            final JavaPairRDD<String, Integer> ones = words.mapToPair(s -> new Tuple2<>(s, 1));
+            final JavaPairRDD<String, Integer> counts = ones.reduceByKey((i1, i2) -> i1 + i2);
+
+            final List<Tuple2<String, Integer>> output = counts.collect();
+            for (Tuple2 tuple : output) {
+                System.out.println(tuple._1() + ": " + tuple._2());
+            }
+
+			// Article articuloVacio = new Article(null, null, null, null);
+			// articuloVacio.prettyPrintNamedEntities();
 			EntidadNombrada prettyPrint = new EntidadNombrada(null, null, 1, null);
 			prettyPrint.reduceFrequency();
 			prettyPrint.prettyPrintFrecuencias();
