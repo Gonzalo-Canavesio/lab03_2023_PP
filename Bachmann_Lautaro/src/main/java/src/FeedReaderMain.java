@@ -11,6 +11,8 @@ import java.util.List;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
+import scala.Tuple2;
 
 public class FeedReaderMain {
 
@@ -63,17 +65,14 @@ public class FeedReaderMain {
                 .map(feed -> doParse(feed))
                 .filter(feed -> feed != null)
                 .flatMap(feed -> feed.getArticleList().iterator());
-            articles.foreach(article -> article.computeNamedEntities(heuristica, sc));
+
+            JavaRDD<String> entidadesNombradas = articles.flatMap(
+                    article -> article.computeNamedEntities(heuristica).iterator()
+                );
 
 			// Imprimir las entidades nombradas
-            final JavaRDD<String> words = lines.flatMap(s -> Arrays.asList(SPACE.split(s)));
-            final JavaPairRDD<String, Integer> ones = words.mapToPair(s -> new Tuple2<>(s, 1));
-            final JavaPairRDD<String, Integer> counts = ones.reduceByKey((i1, i2) -> i1 + i2);
-
-            final List<Tuple2<String, Integer>> output = counts.collect();
-            for (Tuple2 tuple : output) {
-                System.out.println(tuple._1() + ": " + tuple._2());
-            }
+            final JavaPairRDD<String, Integer> entityFrequency = entidadesNombradas.mapToPair(entity -> new Tuple2<>(entity, 1))
+                .reduceByKey((i1, i2) -> i1 + i2);
 
 			// Article articuloVacio = new Article(null, null, null, null);
 			// articuloVacio.prettyPrintNamedEntities();
