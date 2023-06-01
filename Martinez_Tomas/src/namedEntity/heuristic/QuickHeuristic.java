@@ -36,7 +36,7 @@ public class QuickHeuristic extends Heuristic{
 	
 	
 	public static void main(String[] args) {
-//		QuickHeuristic qh = new QuickHeuristic();
+	//	QuickHeuristic qh = new QuickHeuristic();
 	}
 
 	

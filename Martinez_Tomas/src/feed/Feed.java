@@ -1,11 +1,12 @@
 package feed;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /*Esta clase modela la lista de articulos de un determinado feed*/
-public class Feed {
+public class Feed implements Serializable {
 	String siteName;
 	List<Article> articleList;
 	
@@ -64,19 +65,19 @@ public class Feed {
 		  Article a1 = new Article("This Historically Black University Created Its Own Tech Intern Pipeline",
 			  "A new program at Bowie State connects computing students directly with companies, bypassing an often harsh Silicon Valley vetting process",
 			  new Date(),
-			  "https://www.nytimes.com/2023/04/05/technology/bowie-hbcu-tech-intern-pipeline.html"
+			  "https://www.nytimes.com/2023/04/05/technology/bowie-hbcu-tech-intern-pipeline.html", "rss"
 			  );
 		 
 		  Article a2 = new Article("This Historically Black University Created Its Own Tech Intern Pipeline",
 				  "A new program at Bowie State connects computing students directly with companies, bypassing an often harsh Silicon Valley vetting process",
 				  new Date(),
-				  "https://www.nytimes.com/2023/04/05/technology/bowie-hbcu-tech-intern-pipeline.html"
+				  "https://www.nytimes.com/2023/04/05/technology/bowie-hbcu-tech-intern-pipeline.html", "rss"
 				  );
 		  
 		  Article a3 = new Article("This Historically Black University Created Its Own Tech Intern Pipeline",
 				  "A new program at Bowie State connects computing students directly with companies, bypassing an often harsh Silicon Valley vetting process",
 				  new Date(),
-				  "https://www.nytimes.com/2023/04/05/technology/bowie-hbcu-tech-intern-pipeline.html"
+				  "https://www.nytimes.com/2023/04/05/technology/bowie-hbcu-tech-intern-pipeline.html", "rss"
 				  );
 		  
 		  Feed f = new Feed("nytimes");

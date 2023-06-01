@@ -1,9 +1,10 @@
 package namedEntity.heuristic;
 
 import java.util.Map;
+import java.io.Serializable;
 import java.util.HashMap;
 
-public abstract class Heuristic {
+public abstract class Heuristic implements Serializable {
 
 	// TODO: Crear un map que asocie el string de una entidad con un map (o un array) que contenga su categoria y otros datos para rellenar sus atributos
 	private Map<String, Map<String, Object>> entityMap = new HashMap<>();

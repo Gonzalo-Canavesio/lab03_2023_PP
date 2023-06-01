@@ -1,10 +1,11 @@
 package namedEntity;
 
 import java.lang.reflect.Field;
+import java.io.Serializable;
 
 /*Esta clase modela la nocion de entidad nombrada*/
 
-public class EntidadNombrada {
+public class EntidadNombrada implements Serializable {
 	String name;
 	String category;
 	int frequency;

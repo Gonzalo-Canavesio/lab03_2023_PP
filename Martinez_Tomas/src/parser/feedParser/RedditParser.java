@@ -37,7 +37,7 @@ public class RedditParser extends FeedParser<JSONObject>{
             String link = item.getJSONObject("data").getString("url");
             String description = item.getJSONObject("data").getString("selftext");
             Date fecha = new Date(item.getJSONObject("data").getLong("created_utc"));
-            articulo = new Article(title, description, fecha, link);
+            articulo = new Article(title, description, fecha, link, "reddit");
         } catch (Exception e) {
             System.out.println("Error al parsear el feed reddit");
             e.printStackTrace();

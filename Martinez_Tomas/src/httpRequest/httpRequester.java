@@ -9,10 +9,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class httpRequester {
+public class httpRequester implements Serializable {
 	private Subscription subscription;
 
 	public httpRequester(Subscription subscription){

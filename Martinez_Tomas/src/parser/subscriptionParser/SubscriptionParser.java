@@ -2,11 +2,12 @@ package parser.subscriptionParser;
 import parser.GeneralParser;
 import subscription.*;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 
 public abstract class SubscriptionParser<T> implements GeneralParser<Subscription, String> {
 
-    public Subscription parse(String path) {
+    public Subscription parse(String path) throws IOException {
         Subscription subscription = new Subscription(path);
  
         FileReader reader = openFileReader(path);
@@ -51,7 +52,7 @@ public abstract class SubscriptionParser<T> implements GeneralParser<Subscriptio
         return reader;
     }
 
-    protected abstract List<T> getListObjects(FileReader reader);
+    protected abstract List<T> getListObjects(FileReader reader) throws IOException;
 
     protected abstract SingleSubscription parseObject(T object);
 

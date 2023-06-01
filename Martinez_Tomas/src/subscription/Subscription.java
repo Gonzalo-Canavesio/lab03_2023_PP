@@ -1,10 +1,11 @@
 package subscription;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 /*Esta clse abstrae el contenido del archivo  de suscripcion(json)*/
-public class Subscription {
+public class Subscription implements Serializable {
 	private List<SingleSubscription> suscriptionsList;
 	
 	

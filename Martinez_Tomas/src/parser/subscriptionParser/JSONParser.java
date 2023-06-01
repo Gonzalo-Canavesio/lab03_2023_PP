@@ -1,6 +1,7 @@
 package parser.subscriptionParser;
 import subscription.*;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -10,7 +11,7 @@ import org.json.JSONTokener;
 public class JSONParser extends SubscriptionParser<JSONObject> {
 
     @Override
-    public List<JSONObject> getListObjects(FileReader reader) {
+    public List<JSONObject> getListObjects(FileReader reader) throws IOException {
         JSONTokener tokener = new JSONTokener(reader);
         JSONArray jsonArray = new JSONArray(tokener);
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();

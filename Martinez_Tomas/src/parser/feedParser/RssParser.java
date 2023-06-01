@@ -64,7 +64,7 @@ public class RssParser extends FeedParser<Element>{
             String pubDate = item.getElementsByTagName("pubDate").item(0).getTextContent();
             SimpleDateFormat formato = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
             Date fecha = formato.parse(pubDate);
-            Article articulo = new Article(title, description, fecha, link);
+            Article articulo = new Article(title, description, fecha, link, "rss");
             return articulo;
         } catch (Exception e) {
             System.out.println("Error al parsear el feed rss");
