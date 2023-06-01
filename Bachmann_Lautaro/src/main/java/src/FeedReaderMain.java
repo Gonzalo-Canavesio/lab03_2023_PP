@@ -47,16 +47,11 @@ public class FeedReaderMain {
 
         // crear RDD de feeds
         JavaRDD<RoughFeed> roughFeedsRDD = sc.parallelize(roughFeeds);
-        JavaRDD<Feed> parsedFeeds = roughFeedsRDD.map(feed -> doParse(feed));
+        JavaRDD<Feed> parsedFeeds = roughFeedsRDD.map(feed -> doParse(feed)).filter(feed -> feed != null);
 
 		if (args.length == 0) {
-			// Llamar al Parser especifico para extraer los datos necesarios por la aplicacion, instanciar los feeds e imprimirlos
-            parsedFeeds.foreach(feed -> {
-                if (feed != null) {
-                    feed.prettyPrint();
-                }
-            }
-                        );
+            parsedFeeds.foreach(feed -> feed.prettyPrint());
+
 		} else if (args.length == 1 && args[0].equals("-ne")){
 
 			// Llamar al Parser especifico para extraer los datos necesarios por la aplicacion, instanciar los feeds
