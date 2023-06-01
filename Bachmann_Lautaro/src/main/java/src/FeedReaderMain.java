@@ -47,25 +47,24 @@ public class FeedReaderMain {
 
         // crear RDD de feeds
         JavaRDD<RoughFeed> roughFeedsRDD = sc.parallelize(roughFeeds);
-        JavaRDD<Feed> parsedFeeds = roughFeedsRDD.map(feed -> doParse(feed)).filter(feed -> feed != null);
 
 		if (args.length == 0) {
+            JavaRDD<Feed> parsedFeeds = roughFeedsRDD
+                .map(feed -> doParse(feed))
+                .filter(feed -> feed != null);
             parsedFeeds.foreach(feed -> feed.prettyPrint());
 
 		} else if (args.length == 1 && args[0].equals("-ne")){
 
 			// Llamar al Parser especifico para extraer los datos necesarios por la aplicacion, instanciar los feeds
 			Heuristic heuristica = new QuickHeuristic(); // Si se quiere cambiar la heuristica, modificar esta linea
-			for(RoughFeed roughFeed : roughFeeds){
-                Feed feed = doParse(roughFeed);
-				// Extraer las entidades nombradas solo de los feeds RSS porque el texto de los feeds de Reddit bugea la heuristica
-				if(feed != null && roughFeed.getUrlType().equals("rss")){
-					for(Article article : feed.getArticleList()){
-						// Llamar a la heuristica y extraer las entidades nombradas
-						article.computeNamedEntities(heuristica);
-					}
-				}
-			}
+            JavaRDD<Article> articles = roughFeedsRDD
+                .filter(roughFeed -> roughFeed.getUrlType().equals("rss"))
+                .map(feed -> doParse(feed))
+                .filter(feed -> feed != null)
+                .flatMap(feed -> feed.getArticleList().iterator());
+            articles.foreach(article -> article.computeNamedEntities(heuristica));
+
 			// Imprimir las entidades nombradas
 			Article articuloVacio = new Article(null, null, null, null);
 			articuloVacio.prettyPrintNamedEntities();

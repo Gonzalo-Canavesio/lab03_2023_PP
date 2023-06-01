@@ -1,9 +1,10 @@
 package namedEntity.heuristic;
 
 import java.util.List;
+import java.io.Serializable;
 
-public class QuickHeuristic extends Heuristic{
-	
+public class QuickHeuristic extends Heuristic implements Serializable{
+
 	private static List<String> keyWords = List.of(
 		    "i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you",
 		    "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she",
@@ -28,19 +29,19 @@ public class QuickHeuristic extends Heuristic{
 		    // Common uppercase words
 		    "hi", "hello"
 			);
-	
-	
+
+
 	public boolean isEntity(String word) {
 		return word.length() > 1 && word.substring(0, 1).compareTo(word.substring(0, 1).toUpperCase()) == 0 && !keyWords.contains(word.toLowerCase());
 	}
-	
-	
+
+
 	public static void main(String[] args) {
 //		QuickHeuristic qh = new QuickHeuristic();
 	}
 
-	
-	
+
+
 
 }
 
