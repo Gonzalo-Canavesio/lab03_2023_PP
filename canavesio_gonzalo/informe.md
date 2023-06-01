@@ -145,6 +145,6 @@ El proceso de desarrollo fue el siguiente:
 Integre el uso de Spark en la obtención de los feeds mediante una modificación en la clase httpRequester. 
 
 Entonces las tareas que actualmente el programa puede realizar de manera distribuida son:
-1. Una vez parseado el archivo de configuración, obtener los feeds.
-2. Una vez obtenidos los feeds, parsearlos y obtener los articulos.
-3. Una vez obtenidos los articulos, obtener las entidades nombradas y realizar el conteo de las mismas.
+1. Una vez parseado el archivo de configuración, obtener los feeds. Esto se realiza mediante las operación `flatMap` de Spark y con `collect` se obtienen los resultados. (Todo lo anterior se realiza en la clase `httpRequester`)
+2. Una vez obtenidos los feeds, parsearlos y obtener los articulos. Esto se realiza mediante las operació `map` de Spark.
+3. Una vez obtenidos los articulos, obtener las entidades nombradas y realizar el conteo de las mismas. Esto se realiza mediante las operaciones `flatMap`, `mapToPair` y `reduceByKey` de Spark, luego se utiliza `collect` para obtener los resultados finales y poder imprimirlos.

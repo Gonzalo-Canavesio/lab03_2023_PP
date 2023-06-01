@@ -43,22 +43,6 @@ public class FeedReaderMain {
 		System.out.println("************* FeedReader version 1.0 *************");
 		if (args.length == 0) {
 
-			// // Leer el archivo de suscription por defecto y parsearlo
-			// JSONParser subscriptionParser = new JSONParser();
-			// Subscription subscription = subscriptionParser.parse("config/subscriptions.json");
-
-			// // Llamar al httpRequester para obtener el feed del servidor
-			// httpRequester httpRequester = new httpRequester(subscription);
-			// List<RoughFeed> roughFeeds = httpRequester.getFeeds();
-
-			// // Llamar al Parser especifico para extraer los datos necesarios por la aplicacion, instanciar los feeds e imprimirlos
-			// for(RoughFeed roughFeed : roughFeeds){
-            //     Feed feed = doParse(roughFeed);
-			// 	if(feed != null){
-			// 		feed.prettyPrint();
-			// 	}
-			// }
-
 			// Leer el archivo de suscription por defecto y parsearlo
 			JSONParser subscriptionParser = new JSONParser();
 			Subscription subscription = subscriptionParser.parse("config/subscriptions.json");
@@ -92,19 +76,6 @@ public class FeedReaderMain {
 			httpRequester httpRequester = new httpRequester(subscription);
 			List<RoughFeed> roughFeeds = httpRequester.getFeeds();
 
-			// Llamar al Parser especifico para extraer los datos necesarios por la aplicacion, instanciar los feeds
-			// Heuristic heuristica = new QuickHeuristic(); // Si se quiere cambiar la heuristica, modificar esta linea
-			// for(RoughFeed roughFeed : roughFeeds){
-            //     Feed feed = doParse(roughFeed);
-			// 	// Extraer las entidades nombradas solo de los feeds RSS porque el texto de los feeds de Reddit bugea la heuristica
-			// 	if(feed != null && roughFeed.getUrlType().equals("rss")){
-			// 		for(Article article : feed.getArticleList()){
-			// 			// Llamar a la heuristica y extraer las entidades nombradas
-			// 			article.computeNamedEntities(heuristica);
-			// 		}
-			// 	}
-			// }
-			// Adaptar el código anterior para que se ejecute en Spark
 
 			// Crear el contexto de Spark
 			SparkConf conf = new SparkConf().setAppName("FeedReader").setMaster("local");
