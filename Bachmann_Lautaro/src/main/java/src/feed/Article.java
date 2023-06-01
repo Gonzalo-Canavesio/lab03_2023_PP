@@ -76,27 +76,20 @@ public class Article implements Serializable {
 		return null;
 	}
 
-	public void computeNamedEntities(Heuristic h){
-		String text = this.getTitle() + " " +  this.getText();
+    public List<String> computeNamedEntities(Heuristic h) {
+        String text = this.getTitle() + " " + this.getText();
 
-		String charsToRemove = ".,;:()'!?&=\n";
-		for (char c : charsToRemove.toCharArray()) {
-			text = text.replace(String.valueOf(c), "");
-		}
+        String[] words = text.replaceAll("[.,;:()'!?&=\\n]", "").split(" ");
+        List<String> namedEntitiesStrings = new ArrayList<>();
 
-		for (String s: text.split(" ")) {
-			if (h.isEntity(s)){
-				EntidadNombrada ne = this.getNamedEntity(s);
-				if (ne != null) {
-					ne.incFrequency();
-				}else {
-					CreadorEntidades ce = new CreadorEntidades();
-					ne = ce.createEntity(s);
-					namedEntityList.add(ne);
-				}
-			}
-		}
-	}
+        for (String word : words) {
+            if (h.isEntity(word)) {
+                namedEntitiesStrings.add(word);
+            }
+        }
+
+        return namedEntitiesStrings;
+    }
 
 	public void prettyPrintNamedEntities() {
 		System.out.println("**********************************************************************************************");
