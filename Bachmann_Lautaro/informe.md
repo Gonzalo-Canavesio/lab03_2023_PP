@@ -1,3 +1,5 @@
+[TOC]
+
 # Modalidad
 Busquedas en stack overflow o la internet en general.
 Pienso realizar todas las busquedas en inglés.
