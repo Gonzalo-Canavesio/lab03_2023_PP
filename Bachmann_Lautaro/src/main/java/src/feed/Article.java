@@ -91,17 +91,6 @@ public class Article implements Serializable {
         return namedEntitiesStrings;
     }
 
-	public void prettyPrintNamedEntities() {
-		System.out.println("**********************************************************************************************");
-		System.out.println("Named Entities: ");
-		System.out.println("**********************************************************************************************");
-		for (EntidadNombrada n: namedEntityList){
-			n.prettyPrint();
-		}
-		System.out.println("**********************************************************************************************");
-	}
-
-
 	public void prettyPrint() {
 		System.out.println("Title: " + this.getTitle());
 		System.out.println("Publication Date: " + this.getPublicationDate());

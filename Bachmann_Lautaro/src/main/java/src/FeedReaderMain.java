@@ -13,6 +13,8 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import scala.Tuple2;
+import namedEntity.CreadorEntidades;
+
 
 public class FeedReaderMain {
 
@@ -78,9 +80,16 @@ public class FeedReaderMain {
 			JavaRDD<EntidadNombrada> namedEntities = entityFrequency.map(
                     entity -> entityFactory.createEntity(entity._1, entity._2)
             );
+            List<EntidadNombrada> namedEntityList = namedEntities.collect();
 
-			// Article articuloVacio = new Article(null, null, null, null);
-			// articuloVacio.prettyPrintNamedEntities();
+            System.out.println("**********************************************************************************************");
+            System.out.println("Named Entities: ");
+            System.out.println("**********************************************************************************************");
+            for (EntidadNombrada n: namedEntityList){
+                n.prettyPrint();
+            }
+            System.out.println("**********************************************************************************************");
+
 			EntidadNombrada prettyPrint = new EntidadNombrada(null, null, 1, null);
 			prettyPrint.reduceFrequency();
 			prettyPrint.prettyPrintFrecuencias();
