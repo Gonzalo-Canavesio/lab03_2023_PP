@@ -1,10 +1,11 @@
 package namedEntity;
 
 import java.lang.reflect.Field;
+import java.io.Serializable;
 
 /*Esta clase modela la nocion de entidad nombrada*/
 
-public class EntidadNombrada {
+public class EntidadNombrada implements Serializable {
 	String name;
 	String category;
 	int frequency;
@@ -76,7 +77,7 @@ public class EntidadNombrada {
             } catch (IllegalAccessException e) {
                 fieldValue = "N/A";
             }
-			if(fieldName != "EntidadNombradaFrequency"){ 
+			if(fieldName != "EntidadNombradaFrequency"){
             	System.out.println(fieldName + ": " + fieldValue);
 			}
         }
@@ -110,7 +111,7 @@ public void reduceFrequency(){
 		System.out.println("Frecuencia de otros: " + otro.otroFrequency);
 		System.out.println("**********************************************************************************************");
 		System.out.println("Frecuencias sublcases: ");
-		System.out.println("**********************************************************************************************");	
+		System.out.println("**********************************************************************************************");
 		System.out.println("Frecuencia de nombres: " + nombre.nombreFrequency);
 		System.out.println("Frecuencia de apellidos: " + apellido.apellidoFrequency);
 		System.out.println("Frecuencia de titulos: " + titulo.tituloFrequency);

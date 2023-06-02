@@ -2,9 +2,10 @@ package namedEntity;
 import namedEntity.heuristic.Heuristic;
 import namedEntity.heuristic.QuickHeuristic;
 import java.util.Map;
+import java.io.Serializable;
 
 
-public class CreadorEntidades {
+public class CreadorEntidades implements Serializable {
     public EntidadNombrada createEntity(String namedEntity, Integer frequency){
 		EntidadNombrada ne = null;
 		Heuristic h = new QuickHeuristic(); // Da igual que heuristica se use, ya que solo se usa para obtener la categoria
