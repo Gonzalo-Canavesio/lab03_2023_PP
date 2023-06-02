@@ -74,6 +74,11 @@ public class FeedReaderMain {
             final JavaPairRDD<String, Integer> entityFrequency = entidadesNombradas.mapToPair(entity -> new Tuple2<>(entity, 1))
                 .reduceByKey((i1, i2) -> i1 + i2);
 
+            CreadorEntidades entityFactory = new CreadorEntidades();
+			JavaRDD<EntidadNombrada> namedEntities = entityFrequency.map(
+                    entity -> entityFactory.createEntity(entity._1, entity._2)
+            );
+
 			// Article articuloVacio = new Article(null, null, null, null);
 			// articuloVacio.prettyPrintNamedEntities();
 			EntidadNombrada prettyPrint = new EntidadNombrada(null, null, 1, null);
