@@ -122,7 +122,8 @@ para saber que hacer en los commits que voy creando.
 Probablemente me base fuertemente en [esta](https://spark.apache.org/docs/latest/rdd-programming-guide.html#initializing-spark)
 pagina de documentacion de Spark.
 
-## Error al compilar
+## Problemas encontrados
+### Error al compilar
 ```
 ************* FeedReader version 1.0 *************
 Exception in thread "main" java.lang.NoClassDefFoundError: scala/MatchError
@@ -139,7 +140,7 @@ al empezar a usar la herramienta maven.
 
 Para configurar maven me basé principalmente en este [link](https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html)
 
-## Confusion sobre funcionamiento
+### Confusion sobre funcionamiento
 Cuando reemplace el for del main que se encargaba de imprimir el texto de los posts por un map y un foreach,
 en un principio pensé que no estaba teniendo efecto el map, ya que cuando
 ejecutaba el programa aparecian todos los atributos del RoughFeed al hacer
@@ -148,4 +149,13 @@ un prettyprint (o eso era lo que yo pensaba).
 Sin embargo, una vez me fijé bien el output me di cuenta de que se debia a un
 error porque la clase RoughFeed no implementa la interfaz `Serializable`.
 Una vez solucionado eso, comenzó a funcionar correctamente.
+
+### Ver como encarar la computacion de entidades nombradas
+Lo primero que se me ocurrio fue cambiar el metodo `computeNamedEntity` de Article
+para que use Spark.
+Sin embargo, intenté hacerlo pero me daba error porque JavaSparkContext
+no es serializable.
+
+Así que googlee el error y me encontré con [esto](https://stackoverflow.com/questions/27706813/javasparkcontext-not-serializable)
+por lo cual decidí probar con otro metodo.
 
