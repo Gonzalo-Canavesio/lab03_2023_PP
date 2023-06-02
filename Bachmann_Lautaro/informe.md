@@ -1,6 +1,6 @@
 # Modalidad
 Busquedas en stack overflow o la internet en general.
-Las busquedas se realizan en inglés.
+Pienso realizar todas las busquedas en inglés.
 
 # Preguntas
 ## ¿Cómo se instala Spark en Arch Linux?
@@ -143,7 +143,7 @@ Para configurar maven me basé principalmente en este [link](https://maven.apach
 ### Confusion sobre funcionamiento
 Cuando reemplace el for del main que se encargaba de imprimir el texto de los posts por un map y un foreach,
 en un principio pensé que no estaba teniendo efecto el map, ya que cuando
-ejecutaba el programa aparecian todos los atributos del RoughFeed al hacer
+ejecutaba el programa aparecian todos los datos del RoughFeed al hacer
 un prettyprint (o eso era lo que yo pensaba).
 
 Sin embargo, una vez me fijé bien el output me di cuenta de que se debia a un
@@ -156,6 +156,40 @@ para que use Spark.
 Sin embargo, intenté hacerlo pero me daba error porque JavaSparkContext
 no es serializable.
 
-Así que googlee el error y me encontré con [esto](https://stackoverflow.com/questions/27706813/javasparkcontext-not-serializable)
+Así que googlee el error y me encontré con una respuesta de
+[stack overflow](https://stackoverflow.com/questions/27706813/javasparkcontext-not-serializable)
+que dice que no se puede hacer lo que tenia pensado
 por lo cual decidí probar con otro metodo.
+
+## Commits y fuentes
+No se incluyen los commits del informe.
+
+- 9eda0f5: Añadir archivos lab2
+- d35aaa5: Mover codigo repetido fuera de los ifs
+- 408e19d: Modificar imports spark
+    - Fuente: [link](https://spark.apache.org/docs/latest/rdd-programming-guide.html#linking-with-spark)
+- f1ac819: Inicializar spark
+    - Fuente: [link](https://spark.apache.org/docs/latest/rdd-programming-guide.html#initializing-spark)
+- 41cf646: Crear RDD y configurar Spark
+    - Fuentes:
+        - [link](https://spark.apache.org/docs/latest/rdd-programming-guide.html#parallelized-collections)
+        - [link](https://stackoverflow.com/a/37702612)
+- 984b879: Cambiar a estructura de proyecto maven
+- 735352d: Modificar makefile para que use maven
+- c93d831: Reemplazar bucle por map y foreach
+- 96f61f8: Corregir error dado porque la clase RoughFeed no implementa la interfaz Serializable
+    - Fuentes:
+        - [link](https://stackoverflow.com/questions/13895867/why-does-writeobject-throw-java-io-notserializableexception-and-how-do-i-fix-it)
+        - [link](https://docs.oracle.com/javase/8/docs/platform/serialization/spec/serial-arch.html#a4539)
+- 321ecc0: Reemplazar if por filter
+- eb19903: Empezar a usar spark para computar entidades nombradas
+- 121b48a: Copiar codigo de contador de palabras de ejemplo de documentacion de spark para usarlo como base
+    - Fuente: [link](https://github.com/mudrutom/spark-examples/blob/844b8531fe57b407844ab52c2ae9d4a99253ed7c/src/main/java/org/apache/spark/examples/WordCount.java)
+- 407e176: Cambiar metodo computeNamedEntities para que devuelva una lista de strings con las entidades nombradas.
+- 1e0a706: Adaptar codigo ejemplo para contar las entidades nombradas
+- f8c6141: Hacer que la frecuencia se pase como argumento
+- 4e0dc50: Usar spark para instanciar entidades nombradas
+- 1a6a3a3: Agregar problema a la seccion de problemas encontrados en el proceso de desarrollo
+- a8754f7: Mover contenido de prettyPrintNamedEntities al main
+- 488b398: Convertir clases en serializables para que no den error
 
