@@ -40,53 +40,34 @@ public class FeedReaderMain {
     }
 
 	public static void main(String[] args) {
-		System.out.println("************* FeedReader version 1.0 *************");
-		if (args.length == 0) {
+        System.out.println("************* FeedReader version 1.0 *************");
 
-			// Leer el archivo de suscription por defecto y parsearlo
-			JSONParser subscriptionParser = new JSONParser();
-			Subscription subscription = subscriptionParser.parse("config/subscriptions.json");
+        // Leer el archivo de suscription por defecto y parsearlo
+        JSONParser subscriptionParser = new JSONParser();
+        Subscription subscription = subscriptionParser.parse("config/subscriptions.json");
 
-			// Llamar al httpRequester para obtener el feed del servidor
-			httpRequester httpRequester = new httpRequester(subscription);
-			List<RoughFeed> roughFeeds = httpRequester.getFeeds();
+        // Llamar al httpRequester para obtener el feed del servidor
+        httpRequester httpRequester = new httpRequester(subscription);
+        List<RoughFeed> roughFeeds = httpRequester.getFeeds();
 
-			// Crear el contexto de Spark
-			SparkConf conf = new SparkConf().setAppName("FeedReader").setMaster("local");
-			JavaSparkContext sc = new JavaSparkContext(conf);
 
-			// Crear el RDD de feeds
-			JavaRDD<RoughFeed> roughFeedsRDD = sc.parallelize(roughFeeds);
+        // Crear el contexto de Spark
+        SparkConf conf = new SparkConf().setAppName("FeedReader").setMaster("local");
+        JavaSparkContext sc = new JavaSparkContext(conf);
 
-			// Crear el RDD de feeds parseados
-			JavaRDD<Feed> feedsRDD = roughFeedsRDD.map(roughFeed -> doParse(roughFeed));
+        // Crear el RDD de feeds
+        JavaRDD<RoughFeed> roughFeedsRDD = sc.parallelize(roughFeeds);
 
+        // Crear el RDD de feeds parseados
+        JavaRDD<Feed> feedsRDD = roughFeedsRDD.map(roughFeed -> doParse(roughFeed));
+
+        if (args.length == 0) {
 			// Imprimir los feeds parseados
 			feedsRDD.foreach(feed -> feed.prettyPrint());
 
 			sc.close();
 
 		} else if (args.length == 1 && args[0].equals("-ne")){
-
-			// Leer el archivo de suscription por defecto y parsearlo
-			JSONParser subscriptionParser = new JSONParser();
-			Subscription subscription = subscriptionParser.parse("config/subscriptions.json");
-
-			// Llamar al httpRequester para obtener el feed del servidor
-			httpRequester httpRequester = new httpRequester(subscription);
-			List<RoughFeed> roughFeeds = httpRequester.getFeeds();
-
-
-			// Crear el contexto de Spark
-			SparkConf conf = new SparkConf().setAppName("FeedReader").setMaster("local");
-			JavaSparkContext sc = new JavaSparkContext(conf);
-
-			// Crear el RDD de feeds
-			JavaRDD<RoughFeed> roughFeedsRDD = sc.parallelize(roughFeeds);
-
-			// Crear el RDD de feeds parseados
-			JavaRDD<Feed> feedsRDD = roughFeedsRDD.map(roughFeed -> doParse(roughFeed));
-
 			// Crear el RDD de articulos
 			JavaRDD<Article> articlesRDD = feedsRDD.flatMap(feed -> feed.getArticleList().iterator());
 
