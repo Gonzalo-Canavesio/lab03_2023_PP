@@ -106,7 +106,59 @@ public class FeedReaderMain {
 			// Cerrar el contexto de Spark
 			sc.close();
 
-		}else {
+        } else if (args.length == 1 && args[0].equals("-search")){
+            // Retrieve the word or named entity to search for
+            String searchTerm = ""; // Set your search term here
+
+            // Create the RDD of articles
+            JavaRDD<Article> articlesRDD = feedsRDD.flatMap(feed -> feed.getArticleList().iterator());
+
+            // Create the RDD of (documentID, documentText) pairs
+            JavaPairRDD<Long, String> documentRDD = articlesRDD.zipWithIndex().mapToPair(
+                    article -> new Tuple2<>(
+                        article._2(), // Use the index as the document ID
+                        article._1().getText()
+                        )
+                    );
+
+            // Create the inverted index RDD
+            JavaPairRDD<String, Iterable<String>> invertedIndexRDD = documentRDD.flatMapToPair(document -> {
+                List<Tuple2<String, String>> terms = new ArrayList<>();
+                String[] words = document._2.split("\\s+"); // Split document text into words
+                for (String word : words) {
+                    terms.add(new Tuple2<>(word, document._1));
+                }
+                return terms.iterator();
+            }).groupByKey();
+
+            // Filter the documents containing the search term
+            JavaPairRDD<String, Integer> documentsWithSearchTermRDD = invertedIndexRDD.filter(term -> term._1.equals(searchTerm))
+                .flatMapToPair(term -> {
+                    List<Tuple2<String, Integer>> documents = new ArrayList<>();
+                    for (String documentID : term._2) {
+                        documents.add(new Tuple2<>(documentID, 1));
+                    }
+                    return documents.iterator();
+                })
+            .reduceByKey((a, b) -> a + b);
+
+            // Order the documents by the number of occurrences
+            JavaPairRDD<Integer, String> orderedDocumentsRDD = documentsWithSearchTermRDD.mapToPair(doc -> new Tuple2<>(doc._2, doc._1))
+                .sortByKey(false)
+                .mapToPair(doc -> new Tuple2<>(doc._1, doc._2));
+
+            // Collect the ordered documents
+            List<Tuple2<Integer, String>> orderedDocuments = orderedDocumentsRDD.collect();
+
+            // Print the ordered documents
+            for (Tuple2<Integer, String> orderedDoc : orderedDocuments) {
+                System.out.println("Document ID: " + orderedDoc._2 + ", Occurrences: " + orderedDoc._1);
+            }
+
+            // Close the Spark context
+            sc.close();
+
+        }else {
 			printHelp();
 		}
 	}
