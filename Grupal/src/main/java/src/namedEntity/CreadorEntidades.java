@@ -1,6 +1,6 @@
-package namedEntity;
-import namedEntity.heuristic.Heuristic;
-import namedEntity.heuristic.QuickHeuristic;
+package src.namedEntity;
+import src.namedEntity.heuristic.Heuristic;
+import src.namedEntity.heuristic.QuickHeuristic;
 
 import java.io.Serializable;
 import java.util.Map;

@@ -1,6 +1,6 @@
-package parser.subscriptionParser;
-import parser.GeneralParser;
-import subscription.*;
+package src.parser.subscriptionParser;
+import src.parser.GeneralParser;
+import src.subscription.*;
 import java.io.FileReader;
 import java.util.List;
 

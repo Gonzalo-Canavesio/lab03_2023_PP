@@ -1,4 +1,4 @@
-package httpRequest;
+package src.httpRequest;
 import java.io.Serializable;
 
 public class RoughFeed implements Serializable {

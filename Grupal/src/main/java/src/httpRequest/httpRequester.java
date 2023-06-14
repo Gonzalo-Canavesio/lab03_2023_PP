@@ -1,7 +1,7 @@
-package httpRequest;
+package src.httpRequest;
 
-import subscription.SingleSubscription;
-import subscription.Subscription;
+import src.subscription.SingleSubscription;
+import src.subscription.Subscription;
 
 import java.io.BufferedReader;
 import java.io.IOException;

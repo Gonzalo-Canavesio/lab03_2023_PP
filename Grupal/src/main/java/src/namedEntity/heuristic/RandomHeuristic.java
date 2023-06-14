@@ -1,4 +1,4 @@
-package namedEntity.heuristic;
+package src.namedEntity.heuristic;
 
 import java.util.ArrayList;
 import java.util.List;

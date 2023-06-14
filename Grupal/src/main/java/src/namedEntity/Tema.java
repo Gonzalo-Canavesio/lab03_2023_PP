@@ -1,4 +1,4 @@
-package namedEntity;
+package src.namedEntity;
 
 interface Tema {
     String getTema();

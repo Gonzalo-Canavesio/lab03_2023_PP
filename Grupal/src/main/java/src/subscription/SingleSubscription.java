@@ -1,4 +1,4 @@
-package subscription;
+package src.subscription;
 
 import java.io.Serializable;
 import java.util.ArrayList;

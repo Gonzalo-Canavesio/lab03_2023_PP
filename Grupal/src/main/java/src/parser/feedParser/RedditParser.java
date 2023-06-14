@@ -1,7 +1,7 @@
-package parser.feedParser;
+package src.parser.feedParser;
 
-import feed.*;
-import httpRequest.RoughFeed;
+import src.feed.*;
+import src.httpRequest.RoughFeed;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

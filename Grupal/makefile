@@ -1,4 +1,4 @@
-MAIN = FeedReaderMain
+MAIN = src.FeedReaderMain
 TARGETDIR = target
 TARGET = $(TARGETDIR)/my-app-1.0-SNAPSHOT.jar
 
@@ -12,6 +12,12 @@ build:
 # Target to run the application
 run: build
 	spark-submit --class $(MAIN) $(TARGET)
+
+run-ne: build
+	spark-submit --class $(MAIN) $(TARGET) -ne
+
+run-search: build
+	spark-submit --class $(MAIN) $(TARGET) -search
 
 clean:
 	mvn clean

@@ -1,7 +1,7 @@
-package parser.feedParser;
-import feed.*;
-import httpRequest.RoughFeed;
-import parser.GeneralParser;
+package src.parser.feedParser;
+import src.feed.*;
+import src.httpRequest.RoughFeed;
+import src.parser.GeneralParser;
 import java.util.List;
 
 public abstract class FeedParser<T> implements GeneralParser<Feed, RoughFeed> {

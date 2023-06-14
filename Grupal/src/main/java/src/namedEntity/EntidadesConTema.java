@@ -1,4 +1,4 @@
-package namedEntity;
+package src.namedEntity;
 
 
 class apellidoFutbol extends apellido implements Futbol{

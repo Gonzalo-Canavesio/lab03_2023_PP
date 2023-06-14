@@ -1,4 +1,4 @@
-package namedEntity;
+package src.namedEntity;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;

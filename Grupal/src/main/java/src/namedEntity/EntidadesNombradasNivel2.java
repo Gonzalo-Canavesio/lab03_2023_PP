@@ -1,4 +1,4 @@
-package namedEntity;
+package src.namedEntity;
 
 class apellido extends persona{
     String origen;

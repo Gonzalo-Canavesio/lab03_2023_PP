@@ -1,4 +1,4 @@
-package parser.feedParser;
+package src.parser.feedParser;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
@@ -6,8 +6,8 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 import java.io.StringReader;
 import org.xml.sax.InputSource;
-import httpRequest.RoughFeed;
-import feed.*;
+import src.httpRequest.RoughFeed;
+import src.feed.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;

@@ -1,12 +1,12 @@
-package feed;
+package src.feed;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import namedEntity.*;
-import namedEntity.heuristic.Heuristic;
+import src.namedEntity.*;
+import src.namedEntity.heuristic.Heuristic;
 
 /*Esta clase modela el contenido de un articulo (ie, un item en el caso del rss feed) */
 

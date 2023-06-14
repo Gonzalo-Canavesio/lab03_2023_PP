@@ -1,4 +1,4 @@
-package namedEntity.heuristic;
+package src.namedEntity.heuristic;
 
 import java.util.Map;
 import java.io.Serializable;

@@ -1,4 +1,4 @@
-package namedEntity;
+package src.namedEntity;
 
 class persona extends EntidadNombrada{
     int id;
