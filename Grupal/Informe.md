@@ -1,69 +1,27 @@
 #  Informe
+## Modalidad de Trabajo grupal
 
-## Como ejecutar el proyecto
+En esta seccion grupal del proyecto, fuimos comparando nuestras respectivas partes individuales. Y nos dimos cuenta que las tres cumple con lo pedido, al final llegamos a elegir una mas completa y concisa.
 
+Basicamente investigamos sobre lo pedido en el enunciado y a traves de lecturas por la web y preguntas a chat GPT, gracias a esto obtimos una vista gorda, para poder implementar con lo pedido
 
-## Elección de base para la parte grupal
+## Motivos de la eleccion
 
-En esta seccion grupal del proyecto lo primero que hicimos fue comparar nuestras respectivas partes individuales y nos dimos cuenta que las tres cumplían con lo pedido y lo realizaban de maneras similares, todas tenían un buen funcionamiento, sin embargo el de Gonza habia implementado una estructura map-reduce en Spark en la obtención de feeds además de en la identificación de las entidades nombrada.
+A la hora de esta eleccion de proyecto, vimos que tanto el proyecto de **Lauti** como el de **Tomi**, realizan un buen funcionamiento, pero el de **Gonza** es uno de los que tiene un rendimiento mejor al resto. No solo eso si no que tambien tenia implementando el punto estrellas.
 
-Aunque nos hayamos basado centralmente en el de Gonza también se agregaron detalles de las otras 2 implementaciones que sentimos que funcionarían mejor para el lab grupal.
+Entonces fuimos eligiendo lo mejor de cada uno, pero mas que nada nos basamos comletamente en el de **Gonza**.
 
-## Primeros cambios en el lab grupal
+## Implementación
 
-Tomando en cuenta las correcciones del lab2, intentamos evitar tanta repetición de código en el main e hicimos que el código compartido entre las 3 diferentes posibles ejecuciones (Listar articulos, listar entidades nombradas y buscar articulos por una palabra clave) no se repita y este escrito 1 sola vez.
+Lo primero que hacemos en el main es dar otro if, para a la hora de correr el programa elegir la opcion de buscar y ordenar las entidades.
+ 
+![NuevoIF](imgs_informe/nuevo_if.png)
 
-## Estructura del proyecto
+Luego siguiendo con la misma parte, establecemos un termino que se quiere buscar en la variable **searchTerm**, creamos un RDD de artículos combinando todos los artículos de los feeds y a cada artículo se le asigna un índice único utilizando **zipWithUniqueId()**, lo que crea un RDD de pares **(Articulo, ID)** y tambien se crea un RDD de pares **(Palabra, Indice)** para cada palabra de cada artículo. Para ello, se divide el texto del artículo en palabras y se asocia cada palabra con su respectivo índice.
 
-A continuación vamos a describir el flujo del programa y la estructura del proyecto, relacionandolo con la estructura MapReduce propia de Spark.
+![Asignamos](imgs_informe/asignamos.png)
 
-1. Se crea el SparkConf y el SparkContext.
-2. Se crea una RDD (Resilient Distributed Dataset) a partir de una lista de feeds RSS crudos (`List<RoughFeed>`)
-3. Se aplica una transformación de tipo `map` a la RDD para convertir los feeds RSS crudos en feeds RSS ya procesados mediante el uso de la función `doParse`
+Luego filtramos los pares para encontrar el termino buscado, es decir los que son de la forma **(searchTerm, ID)**, se convierten los pares de la forma **(searchTerm, ID)** a **(ID, 1)**, donde el valor 1 representa la aparición del término en un documento y justo despues los que hacemos es combinar os pares con la _misma clave_, es decir, si hay múltiples pares (ID, 1), se suman los valores para obtener el recuento total de apariciones del término en cada documento.
 
-Los 3 pasos anteriores se comparten sin importar los argumentos de entrada, ya que son necesarios para cualquier tipo de ejecución.
-
-Para separar las ejecuciones agregamos un condicional al main, para a la hora de correr el programa elegir la opcion de buscar y ordenar las entidades. La palabra que se usará para buscar los articulos será ingresada como argumento al programa. El condicional tiene la siguiente estructura: `args.length == 2 && args[0].equals("-search")`
-
-Los siguientes pasos son los que se ejecutan en particular al realizar la ejecución de la parte grupal del laboratorio, es decir, crear un índice invertido de la colección de documentos. 
-
-1. Se aplica una transformación de tipo map mediante `flatMap` a la RDD para obtener de cada feed RSS sus articulos. Entonces se obtiene una RDD de tipo `Article` con mayor cantidad de elementos que la RDD de feeds RSS (Suponiendo que cada feed RSS tenia más de 1 articulo).
-2. Se aplica una transformación mediante `zipWithUniqueId` a la RDD de articulos para agregarle un indice a cada articulo. Entonces se obtiene una RDD que contiene tuplas de la forma `(Articulo,ID)`.
-3. Se aplica una transformación de tipo filter mediante `filter` para dejar unicamente los pares de la forma `(SearchTerm, ID)`
-4. Se aplica una transformación de tipo map mediante `mapToPair` para convertir cada par de la forma `(SearchTerm, ID)` en un par de la forma `(ID, 1)`
-5. Se aplica una transformación de tipo reduce mediante `reduceByKey` para sumarizar los valores de cada ID. Entonces se obtiene una RDD que contiene tuplas de la forma `(ID, Cant de apariciones de SearchTerm)`
-6. Se ordena la RDD mediante el uso de `mapToPair` y `sortByKey` para obtener una RDD ordenada por la cantidad de apariciones de cada ID.
-7. Se aplica una transformación de tipo map mediante `mapToPair` para convertir cada par de la forma `(ID, Cant de apariciones de SearchTerm)` en un par de la forma `(Articulo, Cant de apariciones de SearchTerm)`
-8. Se juntan los pares de la forma `(ID, Cant de apariciones de SearchTerm)` en el driver mediante `collect` y se los guarda en una lista de tuplas de la forma `(ID, Cant de apariciones de SearchTerm)`
-9. Se juntan los pares de la forma `(Articulo, ID)` en el driver mediante `collect` y se los guarda en una lista de tuplas de la forma `(Articulo, ID)`
-10. Se cierra el SparkContext
-11. Se combinan las listas de 8. y 9. en una lista de tuplas de la forma `(Articulo, Cant de apariciones de SearchTerm)`
-12. Se imprime la lista de articulos (ordenados según la cantidad de apariciones de cada termino de búsqueda) con su titulo, link y cantidad de apariciones de cada termino de búsqueda.
-
-### Funcionamiento del map-reduce
-
-Map-reduce es el modelo que se sigue durante el proyecto para realizar el procesamiento de los datos, es un modelo de programación utilizado para realizar cálculos distribuidos en sistemas de procesamiento de datos masivos. 
-
-Se compone de dos fases principales: la fase de "Map" y la fase de "Reduce". A continuación vemos en detalle cada una de ellas:
-
-#### Fase de Map
-
-En esta fase, los datos de entrada se dividen en fragmentos más pequeños y se asignan a los nodos de procesamiento disponibles en un clúster distribuido.
-Cada nodo de procesamiento ejecuta una función de mapeo (Map) en paralelo en los datos asignados a él. La función de mapeo toma un conjunto de datos de entrada y los transforma en pares clave-valor.
-El resultado de la función de mapeo se almacena en una estructura intermedia llamada "intermediate key-value store" (almacenamiento intermedio clave-valor).
-En Spark las funciones de tipo map son `flatMap`, `mapToPair`, `map`, entre otras.
-
-
-#### Fase de Reduce
-
-En esta fase, los datos intermedios generados en la fase de Map se agrupan según su clave y se envían a los nodos de reducción disponibles en el clúster distribuido.
-Cada nodo de reducción ejecuta una función de reducción (Reduce) en paralelo en los datos recibidos. La función de reducción combina los datos con la misma clave y genera un conjunto de resultados reducidos.
-Los resultados reducidos se almacenan en un almacenamiento de salida final.
-En Spark las funciones de tipo reduce son `reduceByKey`, `reduce`, entre otras.
-
-
-
-La estructura Map-Reduce en Spark se encarga automáticamente de la distribución de los datos y de la coordinación entre los nodos de procesamiento. Además, maneja tareas como la tolerancia a fallos, la recuperación de errores y la replicación de datos.
-
-La clave del éxito de Map-Reduce radica en su capacidad para procesar grandes volúmenes de datos en paralelo y de manera escalable. Al dividir los datos y las operaciones en tareas más pequeñas y distribuirlas en múltiples nodos, se logra un procesamiento más eficiente y rápido.
+![filtramos_contamos](imgs_informe/contar_termino.png)
 
