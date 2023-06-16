@@ -17,7 +17,7 @@ run-ne: build
 	spark-submit --class $(MAIN) $(TARGET) -ne
 
 run-search: build
-	spark-submit --class $(MAIN) $(TARGET) -search
+	spark-submit --class $(MAIN) $(TARGET) -search $(word)
 
 clean:
 	mvn clean

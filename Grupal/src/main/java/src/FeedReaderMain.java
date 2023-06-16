@@ -42,7 +42,7 @@ public class FeedReaderMain {
     }
 
     public static void main(String[] args) {
-        System.out.println("************* FeedReader version 1.0 *************");
+        System.out.println("************* FeedReader version 2.0 *************");
 
         // Leer el archivo de suscription por defecto y parsearlo
         JSONParser subscriptionParser = new JSONParser();
@@ -113,69 +113,78 @@ public class FeedReaderMain {
             prettyPrint.reduceFrequency();
             prettyPrint.prettyPrintFrecuencias();
 
-        } else if (args.length == 1 && args[0].equals("-search")) {
-            // Retrieve the word or named entity to search for
-            String searchTerm = "Chicago"; // args[1];
+        } else if (args.length == 2 && args[0].equals("-search")) {
+            // Se establece el termino de busqueda a partir de los argumentos
+            String searchTerm = args[1];
 
-            // Create the RDD of articles
+            // Obtener todos los articulos de los feeds
             JavaRDD<Article> articlesRDD = feedsRDD.flatMap(feed -> feed.getArticleList().iterator());
 
-            // Create the RDD of (documentID, documentText) pairs
-            JavaPairRDD<Long, Article> documentRDD = articlesRDD.zipWithIndex().mapToPair(
-                    article -> new Tuple2<>(
-                            article._2(), // Use the index as the document ID
-                            article._1() // Use the article as the document text
-                    ));
+            // Asignarle un indice a cada articulo
+            // Cada articulo se transforma en un par de la forma (Articulo, ID)
+            JavaPairRDD<Article, Long> articlesWithIDRDD = articlesRDD.zipWithUniqueId();
 
-            // Create the inverted index RDD
-            JavaPairRDD<String, Iterable<String>> invertedIndexRDD = documentRDD.flatMapToPair(document -> {
-                List<Tuple2<String, String>> terms = new ArrayList<>();
-                document._2.computeNamedEntities(new QuickHeuristic())
-                        .forEach(namedEntity -> terms.add(new Tuple2<>(namedEntity, document._1.toString())));
+            // Se obtienen los pares de la forma (Palabra, Indice) para cada palabra de
+            // cada articulo
+            JavaPairRDD<String, Long> wordsRDD = articlesWithIDRDD.flatMapToPair(document -> {
+                List<Tuple2<String, Long>> terms = new ArrayList<>();
+                for (String term : (document._1.getText() + " " + document._1.getTitle()).split(" ")) {
+                    terms.add(new Tuple2<>(term, document._2));
+                }
                 return terms.iterator();
-            }).groupByKey();
+            });
 
-            // Filter the documents containing the search term
-            JavaPairRDD<String, Integer> documentsWithSearchTermRDD = invertedIndexRDD
-                    .filter(term -> term._1.equals(searchTerm))
-                    .flatMapToPair(term -> {
-                        List<Tuple2<String, Integer>> documents = new ArrayList<>();
-                        for (String documentID : term._2) {
-                            documents.add(new Tuple2<>(documentID, 1));
-                        }
-                        return documents.iterator();
-                    })
+            // Se filtran los pares para obtener solo los que contienen el termino buscado,
+            // es decir, los que son de la forma (searchTerm, ID)
+            JavaPairRDD<String, Long> wordsFilteredRDD = wordsRDD
+                    .filter(document -> document._1.equals(searchTerm));
+
+            // Se convierten los pares de la forma (searchTerm, ID) a (ID, 1)
+            JavaPairRDD<Long, Long> singleIDRDD = wordsFilteredRDD
+                    .mapToPair(document -> new Tuple2<>(document._2, 1L));
+
+            // Se combinan los pares con la misma clave, es decir, si los pares son
+            // (ID, 1) y (ID, 1) se convierten en (ID, 2)
+            JavaPairRDD<Long, Long> countIDRDD = singleIDRDD
                     .reduceByKey((a, b) -> a + b);
 
-            // Order the documents by the number of occurrences
-            JavaPairRDD<Integer, String> orderedDocumentsRDD = documentsWithSearchTermRDD
-                    .mapToPair(doc -> new Tuple2<>(doc._2, doc._1))
-                    .sortByKey(false)
-                    .mapToPair(doc -> new Tuple2<>(doc._1, doc._2));
+            // Se ordenan los documentos por el segundo elemento del par, es decir, por el
+            // numero de veces que aparece el termino de busqueda en el documento
+            JavaPairRDD<Long, Long> orderedIDRDD = countIDRDD
+                    .mapToPair(x -> x.swap()).sortByKey(false).mapToPair(x -> x.swap());
 
-            // Collect the ordered documents
-            List<Tuple2<Integer, String>> orderedDocuments = orderedDocumentsRDD.collect();
+            // Se recogen los pares (Indice, Numero de apariciones) en una lista
+            List<Tuple2<Long, Long>> orderedID = orderedIDRDD.collect();
 
-            // Collect the articles of the ordered documents
-            List<Tuple2<Article, Integer>> orderedArticles = new ArrayList<>();
-            for (Tuple2<Integer, String> orderedDoc : orderedDocuments) {
-                orderedArticles.add(
-                        new Tuple2<>(documentRDD.filter(doc -> doc._1.equals(Long.parseLong(orderedDoc._2))).first()._2,
-                                orderedDoc._1));
-            }
+            // Se recogen los pares (Articulo, Indice) en una lista
+            List<Tuple2<Article, Long>> articles = articlesWithIDRDD.collect();
 
-            // Close the Spark context
+            // Cerrar el contexto de Spark
             sc.close();
+
+            // Se crea una lista de pares (Articulo, Numero de apariciones) a partir de las
+            // dos listas anteriores
+            List<Tuple2<Article, Long>> orderedArticles = new ArrayList<>();
+            for (Tuple2<Long, Long> ordered : orderedID) {
+                for (Tuple2<Article, Long> article : articles) {
+                    if (ordered._1.equals(article._2)) {
+                        orderedArticles.add(new Tuple2<>(article._1, ordered._2));
+                    }
+                }
+            }
 
             System.out.println(
                     "**********************************************************************************************");
             System.out.println("Ordered articles: ");
             System.out.println(
                     "**********************************************************************************************");
-            for (Tuple2<Integer, String> orderedDoc : orderedDocuments) {
+            for (Tuple2<Article, Long> orderedDoc : orderedArticles) {
                 System.out.println(
-                        "Articulo con " + orderedDoc._1 + " apariciones de la entidad nombrada " + searchTerm + ":");
-                System.out.println(orderedArticles.get(orderedDocuments.indexOf(orderedDoc))._1.getTitle());
+                        "Articulo con " + orderedDoc._2 + " apariciones de la palabra " + searchTerm);
+                System.out
+                        .println("Titulo: " + orderedDoc._1.getTitle());
+
+                System.out.println("Link: " + orderedDoc._1.getLink());
                 System.out.println(
                         "**********************************************************************************************");
             }
