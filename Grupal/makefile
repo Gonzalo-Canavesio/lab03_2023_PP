@@ -19,6 +19,9 @@ run-ne: build
 run-search: build
 	spark-submit --class $(MAIN) $(TARGET) -search $(word)
 
+run-graph: build
+	spark-submit --class $(MAIN) $(TARGET) -graph
+
 clean:
 	mvn clean
 
