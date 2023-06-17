@@ -61,7 +61,7 @@ Cada nodo de reducción ejecuta una función de reducción (Reduce) en paralelo 
 Los resultados reducidos se almacenan en un almacenamiento de salida final.
 En Spark las funciones de tipo reduce son `reduceByKey`, `reduce`, entre otras.
 
-
+![MapReduce](https://i.imgur.com/5VjJWQ2.png)
 
 La estructura Map-Reduce en Spark se encarga automáticamente de la distribución de los datos y de la coordinación entre los nodos de procesamiento. Además, maneja tareas como la tolerancia a fallos, la recuperación de errores y la replicación de datos.
 
