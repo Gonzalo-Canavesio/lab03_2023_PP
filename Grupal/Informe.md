@@ -25,3 +25,11 @@ Luego filtramos los pares para encontrar el termino buscado, es decir los que so
 
 ![filtramos_contamos](imgs_informe/contar_termino.png)
 
+Momentos despues se ordenan los documentos por el segundo elemento del par, es decir, por el número de veces que aparece el término de búsqueda en el documento, se recogen los pares **(Indice, Numero de apariciones)** en una lista ordenada y se recogen los pares **(Articulo, Indice)** en una lista. Para despues cerrar la conexión con el servidor de Spark.
+
+![Ordenar](imgs_informe/Ordena.png)
+
+Luego como ultimo paso nos quedaba crear la lista de pares **(Articulo, Numero de apariciones)** a partir de las dos listas anteriores, vinculando los artículos con su respectivo número de apariciones del término de búsqueda.
+ 
+Como ultimo paso solo queda imprimir la lista de artículos ordenada junto con el número de apariciones del término en cada uno.
+
