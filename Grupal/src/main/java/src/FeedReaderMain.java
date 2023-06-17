@@ -43,6 +43,65 @@ public class FeedReaderMain {
     }
   }
 
+  public static JavaPairRDD<Long, Long> doOrder(JavaPairRDD<String, Long> wordsRDD, String searchTerm) {
+    // Se filtran los pares para obtener solo los que contienen el termino buscado,
+    // es decir, los que son de la forma (searchTerm, ID)
+    JavaPairRDD<String, Long> wordsFilteredRDD = wordsRDD.filter(document -> document._1.equals(searchTerm));
+
+    // Se convierten los pares de la forma (searchTerm, ID) a (ID, 1)
+    JavaPairRDD<Long, Long> singleIDRDD = wordsFilteredRDD.mapToPair(document -> new Tuple2<>(document._2, 1L));
+
+    // Se combinan los pares con la misma clave, es decir, si los pares son
+    // (ID, 1) y (ID, 1) se convierten en (ID, 2)
+    JavaPairRDD<Long, Long> countIDRDD = singleIDRDD.reduceByKey((a, b) -> a + b);
+
+    // Se ordenan los documentos por el segundo elemento del par, es decir, por el
+    // numero de veces que aparece el termino de busqueda en el documento
+    JavaPairRDD<Long, Long> orderedIDRDD = countIDRDD.mapToPair(x -> x.swap()).sortByKey(false)
+        .mapToPair(x -> x.swap());
+
+    return orderedIDRDD;
+  }
+
+  public static void doGraph(JavaPairRDD<String, Long> wordsRDD) {
+    // Se convierten los pares de la forma (Palabra, ID) a (Palabra, 1)
+    JavaPairRDD<String, Long> singleWordRDD = wordsRDD.mapToPair(document -> new Tuple2<>(document._1, 1L));
+
+    // Se combinan los pares con la misma clave, es decir, si los pares son
+    // (Palabra, 1) y (Palabra, 1) se convierten en (Palabra, 2)
+    JavaPairRDD<String, Long> countWordRDD = singleWordRDD.reduceByKey((a, b) -> a + b);
+
+    JavaPairRDD<String, Long> countWordRDD2 = countWordRDD.mapToPair(x -> x.swap()).sortByKey(false)
+        .mapToPair(x -> x.swap());
+
+    List<Tuple2<String, Long>> countWordRDD3 = countWordRDD2.take(10);
+
+    List<String> words = new ArrayList<>();
+    List<Long> counts = new ArrayList<>();
+
+    for (Tuple2<String, Long> tuple : countWordRDD3) {
+      words.add(tuple._1);
+      counts.add(tuple._2);
+    }
+
+    // // Crear el gráfico de barras (No funciona)
+    // CategoryChart chart =
+    // new CategoryChartBuilder()
+    // .width(800)
+    // .height(600)
+    // .title("Histograma de palabras")
+    // .xAxisTitle("Palabras")
+    // .yAxisTitle("Frecuencia")
+    // .build();
+
+    // // Agregar los datos al gráfico
+    // chart.addSeries("Serie 1", words, counts);
+
+    // // Mostrar el gráfico
+    // new SwingWrapper<>(chart).displayChart();
+
+  }
+
   public static void main(String[] args) {
     System.out.println("************* FeedReader version 2.0 *************");
 
@@ -136,62 +195,16 @@ public class FeedReaderMain {
             return terms.iterator();
           });
 
+      // Realización de histograma de palabras para el punto estrella
       if (args[0].equals("-graph")) {
-        // Se convierten los pares de la forma (Palabra, ID) a (Palabra, 1)
-        JavaPairRDD<String, Long> singleWordRDD = wordsRDD.mapToPair(document -> new Tuple2<>(document._1, 1L));
 
-        // Se combinan los pares con la misma clave, es decir, si los pares son
-        // (Palabra, 1) y (Palabra, 1) se convierten en (Palabra, 2)
-        JavaPairRDD<String, Long> countWordRDD = singleWordRDD.reduceByKey((a, b) -> a + b);
-
-        JavaPairRDD<String, Long> countWordRDD2 = countWordRDD.mapToPair(x -> x.swap()).sortByKey(false)
-            .mapToPair(x -> x.swap());
-
-        List<Tuple2<String, Long>> countWordRDD3 = countWordRDD2.take(10);
-
-        List<String> words = new ArrayList<>();
-        List<Long> counts = new ArrayList<>();
-
-        for (Tuple2<String, Long> tuple : countWordRDD3) {
-          words.add(tuple._1);
-          counts.add(tuple._2);
-        }
-
-        // // Crear el gráfico de barras
-        // CategoryChart chart =
-        // new CategoryChartBuilder()
-        // .width(800)
-        // .height(600)
-        // .title("Gráfico de barras")
-        // .xAxisTitle("Eje X")
-        // .yAxisTitle("Eje Y")
-        // .build();
-
-        // // // Agregar los datos al gráfico
-        // chart.addSeries("Serie 1", words, counts);
-
-        // // // Mostrar el gráfico
-        // new SwingWrapper<>(chart).displayChart();
+        doGraph(wordsRDD);
 
       } else {
         // Se establece el termino de busqueda a partir de los argumentos
         String searchTerm = args[1];
 
-        // Se filtran los pares para obtener solo los que contienen el termino buscado,
-        // es decir, los que son de la forma (searchTerm, ID)
-        JavaPairRDD<String, Long> wordsFilteredRDD = wordsRDD.filter(document -> document._1.equals(searchTerm));
-
-        // Se convierten los pares de la forma (searchTerm, ID) a (ID, 1)
-        JavaPairRDD<Long, Long> singleIDRDD = wordsFilteredRDD.mapToPair(document -> new Tuple2<>(document._2, 1L));
-
-        // Se combinan los pares con la misma clave, es decir, si los pares son
-        // (ID, 1) y (ID, 1) se convierten en (ID, 2)
-        JavaPairRDD<Long, Long> countIDRDD = singleIDRDD.reduceByKey((a, b) -> a + b);
-
-        // Se ordenan los documentos por el segundo elemento del par, es decir, por el
-        // numero de veces que aparece el termino de busqueda en el documento
-        JavaPairRDD<Long, Long> orderedIDRDD = countIDRDD.mapToPair(x -> x.swap()).sortByKey(false)
-            .mapToPair(x -> x.swap());
+        JavaPairRDD<Long, Long> orderedIDRDD = doOrder(wordsRDD, searchTerm);
 
         // Se recogen los pares (Indice, Numero de apariciones) en una lista
         List<Tuple2<Long, Long>> orderedID = orderedIDRDD.collect();
