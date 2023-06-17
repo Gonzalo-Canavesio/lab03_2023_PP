@@ -1,7 +1,20 @@
 #  Informe
 
 ## Como ejecutar el proyecto
-TODO: Completar
+
+Requerimientos: 
+
+- Tener instalado [Apache Spark](https://spark.apache.org/downloads.html)
+- Tener instalado [Apache Maven](https://maven.apache.org/download.cgi)
+
+Ejecución:
+
+Entrando en el directorio "Grupal" se puede encontrar un makefile que permite la ejecución del proyecto facilmente. Los comandos para su ejecución son:
+
+- make run (Impresión de los feeds)
+- make run-ne (Conteo de entidades nombradas)
+- make run-search word=<`palabra clave`> (Busqueda de articulos con esa palabra clave)
+- ~~make run-graph (Grafico de Histograma)~~ Por problemas de dependencias no pudimos hacer que funcione la realización del gráfico, intentamos con varias librerias pero ninguna funcionó.
 
 ## Elección de base para la parte grupal
 
@@ -68,7 +81,14 @@ La estructura Map-Reduce en Spark se encarga automáticamente de la distribució
 La clave del éxito de Map-Reduce radica en su capacidad para procesar grandes volúmenes de datos en paralelo y de manera escalable. Al dividir los datos y las operaciones en tareas más pequeñas y distribuirlas en múltiples nodos, se logra un procesamiento más eficiente y rápido.
 
 ## Fuentes utilizadas para el proyecto
-TODO: Completar
+Le pedimos a ChatGPT una estructura base para realizar un indice invertido usando Spark en Java, a partir de esa estructura base fuimos entendiendola, corrigiendo un par de errores que presentaba y generando la versión final del proyecto.
+
+Mientras realizamos el proyecto también hicimos uso de GitHub coPilot para la escritura del código y consultamos en varias ocasiones la documentación de Apache Spark para sacarnos dudas sobre el uso y comportamiento de algunas funciones.
 
 ## Logros y dificultades
-TODO: Completar
+- Pudimos terminar el proyecto utilizando la estructura map-reduce para la obtención del indice invertido
+- Pudimos utilizar la estructura map-reduce también para la obtención de feeds
+- Aprendimos bastante sobre calculo distribuido, sus ventajas y sus desventajas
+- Realizamos test unitario para verificar que el código funciona como debería
+- Aunque intentamos hacer el histograma solicitado en el enunciado, no pudimos conseguir que funcionen las dependencias para realizarlo
+
