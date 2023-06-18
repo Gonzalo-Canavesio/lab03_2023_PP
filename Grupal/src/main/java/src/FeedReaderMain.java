@@ -160,8 +160,6 @@ public class FeedReaderMain {
       // Imprimir los feeds parseados
       feedsRDD.foreach(feed -> feed.prettyPrint());
 
-      sc.close();
-
     } else if (args.length == 1 && args[0].equals("-ne")) {
       // Crear el RDD de articulos
       JavaRDD<Article> articlesRDD = feedsRDD.flatMap(feed -> feed.getArticleList().iterator());
@@ -189,9 +187,6 @@ public class FeedReaderMain {
           namedEntityFrecuency -> creador.createEntity(namedEntityFrecuency._1, namedEntityFrecuency._2));
 
       List<EntidadNombrada> namedEntitiesReduced = namedEntitiesReducedRDD.collect();
-
-      // Cerrar el contexto de Spark
-      sc.close();
 
       printNamedEntities(namedEntitiesReduced);
 
@@ -226,9 +221,6 @@ public class FeedReaderMain {
       // Se recogen los pares (Articulo, Indice) en una lista
       List<Tuple2<Article, Long>> articles = articlesWithIDRDD.collect();
 
-      // Cerrar el contexto de Spark
-      sc.close();
-
       // Se crea una lista de pares (Articulo, Numero de apariciones) a partir de las
       // dos listas anteriores
       List<Tuple2<Article, Long>> orderedArticles = new ArrayList<>();
@@ -244,5 +236,7 @@ public class FeedReaderMain {
     } else {
         printHelp();
     }
+    // Cerrar el contexto de Spark
+    sc.close();
   }
 }
