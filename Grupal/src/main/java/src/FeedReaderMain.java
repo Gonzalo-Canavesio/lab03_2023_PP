@@ -63,6 +63,7 @@ public class FeedReaderMain {
     return orderedIDRDD;
   }
 
+  // Codigo muerto, dejado como prueba de que al menos lo intentamos
   public static void doGraph(JavaPairRDD<String, Long> wordsRDD) {
     // Se convierten los pares de la forma (Palabra, ID) a (Palabra, 1)
     JavaPairRDD<String, Long> singleWordRDD = wordsRDD.mapToPair(document -> new Tuple2<>(document._1, 1L));
@@ -100,6 +101,38 @@ public class FeedReaderMain {
     // // Mostrar el gráfico
     // new SwingWrapper<>(chart).displayChart();
 
+  }
+  private static void printNamedEntities(List<EntidadNombrada> namedEntitiesReduced) {
+      // Imprimir las entidades nombradas
+      System.out.println(
+          "**********************************************************************************************");
+      System.out.println("Named Entities: ");
+      System.out.println(
+          "**********************************************************************************************");
+      for (EntidadNombrada namedEntityReduced : namedEntitiesReduced) {
+        namedEntityReduced.prettyPrint();
+      }
+      System.out.println(
+          "**********************************************************************************************");
+      EntidadNombrada prettyPrint = new EntidadNombrada(null, null, 1, null);
+      prettyPrint.reduceFrequency();
+      prettyPrint.prettyPrintFrecuencias();
+  }
+
+  private static void printOrderedArticles(List<Tuple2<Article, Long>> orderedArticles, String searchTerm) {
+      System.out.println(
+              "**********************************************************************************************");
+      System.out.println("Ordered articles: ");
+      System.out.println(
+              "**********************************************************************************************");
+      for (Tuple2<Article, Long> orderedDoc : orderedArticles) {
+          System.out.println(
+                  "Articulo con " + orderedDoc._2 + " apariciones de la palabra " + searchTerm); System.out.println("Titulo: " + orderedDoc._1.getTitle());
+
+          System.out.println("Link: " + orderedDoc._1.getLink());
+          System.out.println(
+                  "**********************************************************************************************");
+      }
   }
 
   public static void main(String[] args) {
@@ -160,23 +193,9 @@ public class FeedReaderMain {
       // Cerrar el contexto de Spark
       sc.close();
 
-      // Imprimir las entidades nombradas
-      System.out.println(
-          "**********************************************************************************************");
-      System.out.println("Named Entities: ");
-      System.out.println(
-          "**********************************************************************************************");
-      for (EntidadNombrada namedEntityReduced : namedEntitiesReduced) {
-        namedEntityReduced.prettyPrint();
-      }
-      System.out.println(
-          "**********************************************************************************************");
-      EntidadNombrada prettyPrint = new EntidadNombrada(null, null, 1, null);
-      prettyPrint.reduceFrequency();
-      prettyPrint.prettyPrintFrecuencias();
+      printNamedEntities(namedEntitiesReduced);
 
-    } else if ((args.length == 2 && args[0].equals("-search"))
-        || (args.length == 1 && args[0].equals("-graph"))) {
+    } else if (args.length == 2 && args[0].equals("-search")) {
       // Obtener todos los articulos de los feeds
       JavaRDD<Article> articlesRDD = feedsRDD.flatMap(feed -> feed.getArticleList().iterator());
 
@@ -196,53 +215,34 @@ public class FeedReaderMain {
           });
 
       // Realización de histograma de palabras para el punto estrella
-      if (args[0].equals("-graph")) {
+      // Se establece el termino de busqueda a partir de los argumentos
+      String searchTerm = args[1];
 
-        doGraph(wordsRDD);
+      JavaPairRDD<Long, Long> orderedIDRDD = doOrder(wordsRDD, searchTerm);
 
-      } else {
-        // Se establece el termino de busqueda a partir de los argumentos
-        String searchTerm = args[1];
+      // Se recogen los pares (Indice, Numero de apariciones) en una lista
+      List<Tuple2<Long, Long>> orderedID = orderedIDRDD.collect();
 
-        JavaPairRDD<Long, Long> orderedIDRDD = doOrder(wordsRDD, searchTerm);
+      // Se recogen los pares (Articulo, Indice) en una lista
+      List<Tuple2<Article, Long>> articles = articlesWithIDRDD.collect();
 
-        // Se recogen los pares (Indice, Numero de apariciones) en una lista
-        List<Tuple2<Long, Long>> orderedID = orderedIDRDD.collect();
+      // Cerrar el contexto de Spark
+      sc.close();
 
-        // Se recogen los pares (Articulo, Indice) en una lista
-        List<Tuple2<Article, Long>> articles = articlesWithIDRDD.collect();
-
-        // Cerrar el contexto de Spark
-        sc.close();
-
-        // Se crea una lista de pares (Articulo, Numero de apariciones) a partir de las
-        // dos listas anteriores
-        List<Tuple2<Article, Long>> orderedArticles = new ArrayList<>();
-        for (Tuple2<Long, Long> ordered : orderedID) {
+      // Se crea una lista de pares (Articulo, Numero de apariciones) a partir de las
+      // dos listas anteriores
+      List<Tuple2<Article, Long>> orderedArticles = new ArrayList<>();
+      for (Tuple2<Long, Long> ordered : orderedID) {
           for (Tuple2<Article, Long> article : articles) {
-            if (ordered._1.equals(article._2)) {
-              orderedArticles.add(new Tuple2<>(article._1, ordered._2));
-            }
+              if (ordered._1.equals(article._2)) {
+                  orderedArticles.add(new Tuple2<>(article._1, ordered._2));
+              }
           }
-        }
-
-        System.out.println(
-            "**********************************************************************************************");
-        System.out.println("Ordered articles: ");
-        System.out.println(
-            "**********************************************************************************************");
-        for (Tuple2<Article, Long> orderedDoc : orderedArticles) {
-          System.out.println(
-              "Articulo con " + orderedDoc._2 + " apariciones de la palabra " + searchTerm);
-          System.out.println("Titulo: " + orderedDoc._1.getTitle());
-
-          System.out.println("Link: " + orderedDoc._1.getLink());
-          System.out.println(
-              "**********************************************************************************************");
-        }
       }
+
+      printOrderedArticles(orderedArticles, searchTerm);
     } else {
-      printHelp();
+        printHelp();
     }
   }
 }
