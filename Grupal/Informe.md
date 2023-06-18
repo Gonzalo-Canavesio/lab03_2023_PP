@@ -2,7 +2,7 @@
 
 ## Como ejecutar el proyecto
 
-Requerimientos: 
+Requerimientos:
 
 - Tener instalado [Apache Spark](https://spark.apache.org/downloads.html)
 - Tener instalado [Apache Maven](https://maven.apache.org/download.cgi)
@@ -26,6 +26,9 @@ Aunque nos hayamos basado centralmente en el de Gonza también se agregaron deta
 
 Tomando en cuenta las correcciones del lab2, intentamos evitar tanta repetición de código en el main e hicimos que el código compartido entre las 3 diferentes posibles ejecuciones (Listar articulos, listar entidades nombradas y buscar articulos por una palabra clave) no se repita y este escrito 1 sola vez.
 
+Otro de los cambios que hicimos fue empezar a usar Maven, ya que algunos de los
+integrantes del grupo tenian problemas para instalar las librerias necesarias.
+
 ## Estructura del proyecto
 
 A continuación vamos a describir el flujo del programa y la estructura del proyecto, relacionandolo con la estructura MapReduce propia de Spark.
@@ -38,7 +41,7 @@ Los 3 pasos anteriores se comparten sin importar los argumentos de entrada, ya q
 
 Para separar las ejecuciones agregamos un condicional al main, para a la hora de correr el programa elegir la opcion de buscar y ordenar las entidades. La palabra que se usará para buscar los articulos será ingresada como argumento al programa. El condicional tiene la siguiente estructura: `args.length == 2 && args[0].equals("-search")`
 
-Los siguientes pasos son los que se ejecutan en particular al realizar la ejecución de la parte grupal del laboratorio, es decir, crear un índice invertido de la colección de documentos. 
+Los siguientes pasos son los que se ejecutan en particular al realizar la ejecución de la parte grupal del laboratorio, es decir, crear un índice invertido de la colección de documentos.
 
 1. Se aplica una transformación de tipo map mediante `flatMap` a la RDD para obtener de cada feed RSS sus articulos. Entonces se obtiene una RDD de tipo `Article` con mayor cantidad de elementos que la RDD de feeds RSS (Suponiendo que cada feed RSS tenia más de 1 articulo).
 2. Se aplica una transformación mediante `zipWithUniqueId` a la RDD de articulos para agregarle un indice a cada articulo. Entonces se obtiene una RDD que contiene tuplas de la forma `(Articulo,ID)`.
@@ -55,7 +58,7 @@ Los siguientes pasos son los que se ejecutan en particular al realizar la ejecuc
 
 ### Funcionamiento del map-reduce
 
-Map-reduce es el modelo que se sigue durante el proyecto para realizar el procesamiento de los datos, es un modelo de programación utilizado para realizar cálculos distribuidos en sistemas de procesamiento de datos masivos. 
+Map-reduce es el modelo que se sigue durante el proyecto para realizar el procesamiento de los datos, es un modelo de programación utilizado para realizar cálculos distribuidos en sistemas de procesamiento de datos masivos.
 
 Se compone de dos fases principales: la fase de "Map" y la fase de "Reduce". A continuación vemos en detalle cada una de ellas:
 
@@ -91,4 +94,7 @@ Mientras realizamos el proyecto también hicimos uso de GitHub coPilot para la e
 - Aprendimos bastante sobre calculo distribuido, sus ventajas y sus desventajas
 - Realizamos test unitario para verificar que el código funciona como debería
 - Aunque intentamos hacer el histograma solicitado en el enunciado, no pudimos conseguir que funcionen las dependencias para realizarlo
-
+- En varias ocasiones se complico lidiar con mensajes de error poco entendibles de las librerias
+o el mismo java.
+    - Intentamos implementar el punto estrella del histograma pero por mas que intentamos varias
+    formas no pudimos hacer andar la libreria necesaria.
